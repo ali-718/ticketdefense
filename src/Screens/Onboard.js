@@ -134,6 +134,7 @@ export default class Onboard extends Component {
                     alignItems: "center",
                     justifyContent: "center",
                   }}
+                  onPress={() => this.props.navigation.navigate("login")}
                 >
                   <Text style={{ color: Blue, fontWeight: "bold" }}>LOGIN</Text>
                 </TouchableOpacity>

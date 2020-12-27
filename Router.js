@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Splash from "./src/Screens/Splash";
 import Onboard from "./src/Screens/Onboard";
+import Login from "./src/Screens/Login";
 
 const Stack = createStackNavigator();
 
@@ -11,6 +12,7 @@ const Auth = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="splash" component={Splash} />
     <Stack.Screen name="onBoard" component={Onboard} />
+    <Stack.Screen name="login" component={Login} />
   </Stack.Navigator>
 );
 
