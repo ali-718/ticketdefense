@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Carousel, { Pagination } from "react-native-snap-carousel";
-import { Blue } from "../config/Theme";
+import { Blue } from "../../config/Theme";
 
 const WIDTH = Dimensions.get("window").width;
 
@@ -71,7 +71,7 @@ export default class Onboard extends Component {
           <View style={{ width: "100%", height: 180 }}>
             <Image
               style={{ width: "100%", height: 180 }}
-              source={require("../../assets/upper.png")}
+              source={require("../../../assets/upper.png")}
             />
           </View>
           <View
@@ -107,7 +107,7 @@ export default class Onboard extends Component {
           >
             <Image
               style={{ width: "100%", height: 130, resizeMode: "stretch" }}
-              source={require("../../assets/lower.png")}
+              source={require("../../../assets/lower.png")}
             />
             <View
               style={{

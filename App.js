@@ -1,10 +1,14 @@
 import React, { Component } from "react";
-import { Text, View } from "react-native";
+import { Provider } from "react-redux";
 import Router from "./Router";
-import Home from "./src/Screens/Home";
+import store from "./store";
 
 export default class App extends Component {
   render() {
-    return <Home />;
+    return (
+      <Provider store={store}>
+        <Router />
+      </Provider>
+    );
   }
 }

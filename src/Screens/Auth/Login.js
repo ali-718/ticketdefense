@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Blue, Pink } from "../config/Theme";
+import { Blue, Pink } from "../../config/Theme";
 import CheckBox from "react-native-check-box";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
@@ -47,11 +47,11 @@ export default class Login extends Component {
                 // height: 250,
                 flex: 1,
               }}
-              source={require("../../assets/road.png")}
+              source={require("../../../assets/road.png")}
             >
               <Image
                 style={{ width: 300, height: 90, resizeMode: "contain" }}
-                source={require("../../assets/logo.png")}
+                source={require("../../../assets/logo.png")}
               />
               <Text style={{ color: "white", marginTop: 10, fontSize: 18 }}>
                 An All-In One Traffic Ticket Platform

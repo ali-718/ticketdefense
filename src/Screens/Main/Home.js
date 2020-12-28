@@ -1,16 +1,22 @@
 import React, { Component } from "react";
-import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
-import { Pink } from "../config/Theme";
+import {
+  SafeAreaView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Pink } from "../../config/Theme";
 import { Container, Header, Tab, Tabs, TabHeading, Icon } from "native-base";
-import { stateList } from "../config/states";
+import { stateList } from "../../config/states";
 
 export default class Home extends Component {
-  componentDidMount() {
-    const search = "f";
-    let find = stateList.filter((item) => item?.text.includes(search));
+  // componentDidMount() {
+  //   const search = "f";
+  //   let find = stateList.filter((item) => item?.text.includes(search));
 
-    console.log(find);
-  }
+  //   console.log(find);
+  // }
 
   tab1 = () => (
     <View
@@ -56,6 +62,7 @@ export default class Home extends Component {
         each case from start to finish
       </Text>
       <TouchableOpacity
+        onPress={() => this.props.navigation.navigate("States")}
         style={{
           width: "90%",
           height: 50,
@@ -80,6 +87,7 @@ export default class Home extends Component {
           alignItems: "center",
           justifyContent: "center",
           backgroundColor: "white",
+          paddingTop: StatusBar.currentHeight,
         }}
       >
         <Tabs
