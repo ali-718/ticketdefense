@@ -1,4 +1,3 @@
-import { Icon } from "native-base";
 import React, { Component } from "react";
 import {
   SafeAreaView,
@@ -10,27 +9,31 @@ import {
   View,
 } from "react-native";
 import Header from "../../components/Header";
-import { stateList } from "../../config/states";
+import { Icon } from "native-base";
+import { courtHouseList } from "../../config/courts";
+import { Pink } from "../../config/Theme";
 
-export default class StateList extends Component {
+export default class CourtList extends Component {
   state = {
-    states: [],
+    courts: [],
   };
 
   componentDidMount() {
     this.setState({
-      states: stateList,
+      courts: courtHouseList,
     });
   }
 
   search = (text) => {
     const keyword = text?.toLowerCase();
-    const realData = stateList;
-    const finalData = realData.filter((item) =>
-      item.text?.toLowerCase()?.includes(keyword)
+    const realData = courtHouseList;
+    const finalData = realData.filter(
+      (item) =>
+        item.name?.toLowerCase()?.includes(keyword) ||
+        item.address?.toLowerCase()?.includes(keyword)
     );
 
-    this.setState({ states: finalData });
+    this.setState({ courts: finalData });
   };
 
   render() {
@@ -55,7 +58,7 @@ export default class StateList extends Component {
           <View style={{ width: "90%", flex: 1, alignItems: "center" }}>
             {/* <View style={{ width: "100%" }}> */}
             <Text style={{ fontSize: 20, color: "black", fontWeight: "bold" }}>
-              Where did you get your ticket ?
+              Which court is your ticket assigned to?
             </Text>
             {/* </View> */}
 
@@ -86,30 +89,34 @@ export default class StateList extends Component {
               </View>
             </View>
 
-            {/* states */}
+            {/* courts */}
             <ScrollView
               showsVerticalScrollIndicator={false}
               style={{ width: "100%" }}
             >
-              {this.state.states.map((item, i) => (
+              {this.state.courts.map((item, i) => (
                 <TouchableOpacity
                   onPress={() => this.props.navigation.navigate("TicketImage")}
                   key={i}
                   style={{
                     width: "100%",
-                    height: 50,
+                    height: 70,
                     flexDirection: "row",
                     borderColor: "gainsboro",
                     borderStyle: "solid",
                     borderBottomWidth: 0.5,
                     justifyContent: "space-between",
-                    paddingHorizontal: 10,
+                    paddingHorizontal: 0,
                     alignItems: "center",
                     marginTop: 10,
                   }}
                 >
-                  <Text style={{ color: "black" }}>{item.text}</Text>
-
+                  <View>
+                    <Text style={{ color: "black" }}>{item.name}</Text>
+                    <Text style={{ color: Pink, marginTop: 5 }}>
+                      {item.address}
+                    </Text>
+                  </View>
                   <Icon
                     name="arrow-forward-ios"
                     type="MaterialIcons"

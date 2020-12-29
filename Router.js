@@ -9,6 +9,11 @@ import Home from "./src/Screens/Main/Home";
 import { connect } from "react-redux";
 import { mapStateToProps } from "./src/config/config";
 import StateList from "./src/Screens/Main/StateList";
+import TicketLawyer from "./src/Screens/Main/TicketLawyer";
+import TicketImage from "./src/Screens/Main/TicketImage";
+import NumberOfViolations from "./src/Screens/Main/NumberOfViolations";
+import MoreTicketDetails from "./src/Screens/Main/MoreTicketDetails";
+import CourtList from "./src/Screens/Main/CourtList";
 
 const Stack = createStackNavigator();
 
@@ -24,6 +29,11 @@ const Main = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Home" component={Home} />
     <Stack.Screen name="States" component={StateList} />
+    <Stack.Screen name="TicketImage" component={TicketImage} />
+    <Stack.Screen name="NumberOfViolations" component={NumberOfViolations} />
+    <Stack.Screen name="MoreTicketDetails" component={MoreTicketDetails} />
+    <Stack.Screen name="CourtList" component={CourtList} />
+    <Stack.Screen name="Lawyers" component={TicketLawyer} />
   </Stack.Navigator>
 );
 
