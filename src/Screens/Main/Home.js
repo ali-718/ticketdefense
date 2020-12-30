@@ -9,6 +9,7 @@ import {
 import { Pink } from "../../config/Theme";
 import { Container, Header, Tab, Tabs, TabHeading, Icon } from "native-base";
 import { stateList } from "../../config/states";
+import Settings from "./Settings/Settings";
 
 export default class Home extends Component {
   // componentDidMount() {
@@ -91,7 +92,9 @@ export default class Home extends Component {
         }}
       >
         <Tabs
-          style={{ borderBottomWidth: 0, backgroundColor: Pink }}
+          style={{
+            borderBottomWidth: 0,
+          }}
           tabBarActiveTextColor="white"
           tabBarPosition="bottom"
           tabBarUnderlineStyle={{
@@ -114,6 +117,7 @@ export default class Home extends Component {
                   backgroundColor: Pink,
                   borderBottomColor: Pink,
                   flexDirection: "column",
+                  marginTop: -10,
                 }}
                 activeTextStyle={{ color: "white" }}
                 activeTabStyle={{ borderBottomWidth: 0, borderColor: Pink }}
@@ -144,6 +148,7 @@ export default class Home extends Component {
                   backgroundColor: Pink,
                   borderBottomColor: Pink,
                   flexDirection: "column",
+                  marginTop: -10,
                 }}
                 activeTextStyle={{ color: "white" }}
                 activeTabStyle={{ borderBottomWidth: 0, borderColor: Pink }}
@@ -160,7 +165,7 @@ export default class Home extends Component {
                     alignItems: "center",
                     justifyContent: "center",
                     borderRadius: 100,
-                    marginTop: -50,
+                    marginTop: -60,
                   }}
                 >
                   <Icon
@@ -188,6 +193,7 @@ export default class Home extends Component {
                   backgroundColor: Pink,
                   borderBottomColor: Pink,
                   flexDirection: "column",
+                  marginTop: -10,
                 }}
                 activeTextStyle={{ color: "white" }}
                 activeTabStyle={{ borderBottomWidth: 0, borderColor: Pink }}
@@ -195,14 +201,14 @@ export default class Home extends Component {
               >
                 <Icon
                   style={{ color: "white" }}
-                  name="clipboard-text-outline"
-                  type="MaterialCommunityIcons"
+                  name="ios-settings-sharp"
+                  type="Ionicons"
                 />
-                <Text style={{ color: "white", marginTop: 2 }}>Cases</Text>
+                <Text style={{ color: "white", marginTop: 2 }}>Settings</Text>
               </TabHeading>
             }
           >
-            {this.tab1()}
+            <Settings navigation={this.props.navigation} />
           </Tab>
         </Tabs>
       </SafeAreaView>

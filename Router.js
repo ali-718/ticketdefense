@@ -14,6 +14,9 @@ import TicketImage from "./src/Screens/Main/TicketImage";
 import NumberOfViolations from "./src/Screens/Main/NumberOfViolations";
 import MoreTicketDetails from "./src/Screens/Main/MoreTicketDetails";
 import CourtList from "./src/Screens/Main/CourtList";
+import Profile from "./src/Screens/Main/Settings/Profile";
+import PaymentMethods from "./src/Screens/Main/Settings/PaymentMethods";
+import Contact from "./src/Screens/Main/Settings/Contact";
 
 const Stack = createStackNavigator();
 
@@ -34,6 +37,10 @@ const Main = () => (
     <Stack.Screen name="MoreTicketDetails" component={MoreTicketDetails} />
     <Stack.Screen name="CourtList" component={CourtList} />
     <Stack.Screen name="Lawyers" component={TicketLawyer} />
+    {/* settings screens */}
+    <Stack.Screen name="Profile" component={Profile} />
+    <Stack.Screen name="PaymentMethods" component={PaymentMethods} />
+    <Stack.Screen name="Contact" component={Contact} />
   </Stack.Navigator>
 );
 
