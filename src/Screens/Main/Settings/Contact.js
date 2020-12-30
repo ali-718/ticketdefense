@@ -24,7 +24,7 @@ export default class Contact extends Component {
           width: "100%",
           flex: 1,
           backgroundColor: "white",
-          //   paddingTop: StatusBar.currentHeight,
+          paddingTop: StatusBar.currentHeight,
           alignItems: "center",
           backgroundColor: LightGray,
         }}

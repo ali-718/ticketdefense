@@ -50,6 +50,7 @@ class Profile extends Component {
     frequency: false,
     showAlert: false,
     badge: "",
+    testImage: "",
   };
 
   async componentDidMount() {
@@ -66,6 +67,12 @@ class Profile extends Component {
     //   Mobile: user?.UserMobNo,
     //   Company: "BizIntel",
     // });
+    this.setState({
+      Name: "ali haider",
+      Email: "alimurtuza718@gmail.com",
+      Mobile: "03062888544",
+      Company: "BizIntel",
+    });
   }
 
   openGallery = () => {
@@ -135,6 +142,8 @@ class Profile extends Component {
                 : res.uri.replace("file://", ""),
           });
           data.append("Content-Type", "image/png");
+
+          this.setState({ testImage: res.uri, imageLoading: false });
 
           //   this.props
           //     .UploadProfileImg(this.props.auth?.user?.UserId, data)
@@ -473,10 +482,15 @@ class Profile extends Component {
                   <Image
                     style={{ width: 120, height: 120, borderRadius: 100 }}
                     source={
-                      user?.ProfPicPath
-                        ? { uri: user?.ProfPicPath }
+                      this.state.testImage.length > 0
+                        ? { uri: this.state.testImage }
                         : require("../../../../assets/user.png")
                     }
+                    // source={
+                    //   user?.ProfPicPath
+                    //     ? { uri: user?.ProfPicPath }
+                    //     : require("../../../../assets/user.png")
+                    // }
                   />
                   <View
                     style={{
