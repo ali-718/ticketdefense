@@ -95,6 +95,7 @@ export default class TicketLawyer extends Component {
             >
               {this.state.lawyers.map((item, i) => (
                 <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate("Checkout")}
                   key={i}
                   style={{
                     width: "100%",

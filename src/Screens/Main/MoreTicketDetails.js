@@ -6,13 +6,15 @@ import {
   SafeAreaView,
   StatusBar,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import Header from "../../components/Header";
-import { Pink } from "../../config/Theme";
+import { LightGray, Pink } from "../../config/Theme";
 import DatePicker from "react-native-datepicker";
 import ToggleSwitch from "toggle-switch-react-native";
+import { Icon } from "native-base";
 
 export default class MoreTicketDetails extends Component {
   state = {
@@ -21,6 +23,8 @@ export default class MoreTicketDetails extends Component {
     accident: false,
     commercialLicense: false,
     drivingCommercialVehicle: false,
+    violations: 0,
+    typeOfViolation: "",
   };
 
   render() {
@@ -52,6 +56,47 @@ export default class MoreTicketDetails extends Component {
 
           <View style={{ width: "100%", marginTop: 30 }}>
             <View
+              style={{
+                width: "100%",
+                justifyContent: "space-between",
+                alignItems: "center",
+                borderBottomWidth: 1,
+                borderColor: "gainsboro",
+                borderStyle: "solid",
+                paddingBottom: 20,
+              }}
+            >
+              <View style={{ width: "100%" }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: "gray",
+                  }}
+                >
+                  When type of violation(s) did you recieve?
+                </Text>
+              </View>
+              <View style={{ width: "100%", marginTop: 10 }}>
+                <TextInput
+                  style={{
+                    width: "100%",
+                    height: 40,
+                    paddingLeft: 10,
+                    backgroundColor: LightGray,
+                    borderRadius: 10,
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                    borderColor: "gray",
+                  }}
+                  placeholder="Enter here!"
+                  onChangeText={(val) =>
+                    this.setState({ typeOfViolation: val })
+                  }
+                />
+              </View>
+            </View>
+
+            {/* <View
               style={{
                 width: "100%",
                 flexDirection: "row",
@@ -99,9 +144,9 @@ export default class MoreTicketDetails extends Component {
                   </Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </View> */}
 
-            <View
+            {/* <View
               style={{
                 width: "100%",
                 flexDirection: "row",
@@ -148,9 +193,9 @@ export default class MoreTicketDetails extends Component {
                   </Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </View> */}
 
-            <View
+            {/* <View
               style={{
                 width: "100%",
                 flexDirection: "row",
@@ -183,7 +228,7 @@ export default class MoreTicketDetails extends Component {
                   onToggle={(isOn) => this.setState({ accident: isOn })}
                 />
               </View>
-            </View>
+            </View> */}
 
             <View
               style={{
@@ -191,9 +236,9 @@ export default class MoreTicketDetails extends Component {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
-                // borderBottomWidth: 1,
-                // borderColor: "gainsboro",
-                // borderStyle: "solid",
+                borderBottomWidth: 1,
+                borderColor: "gainsboro",
+                borderStyle: "solid",
                 paddingBottom: 20,
                 marginTop: 20,
               }}
@@ -205,7 +250,7 @@ export default class MoreTicketDetails extends Component {
                     color: "gray",
                   }}
                 >
-                  Do you have a commercial driver's license?
+                  Do you currently have points on your license?
                 </Text>
               </View>
               <View style={{ width: 110, alignItems: "flex-end" }}>
@@ -224,7 +269,7 @@ export default class MoreTicketDetails extends Component {
               </View>
             </View>
 
-            <View style={{ width: "100%", marginTop: 0 }}>
+            {/* <View style={{ width: "100%", marginTop: 0 }}>
               <Text
                 style={{
                   fontSize: 13,
@@ -234,10 +279,10 @@ export default class MoreTicketDetails extends Component {
                 (This does not apply to most people. If you don't know or you're
                 unsure, select "No")
               </Text>
-            </View>
+            </View> */}
           </View>
 
-          {this.state.commercialLicense ? (
+          {/* {this.state.commercialLicense ? (
             <View
               style={{
                 width: "100%",
@@ -275,6 +320,88 @@ export default class MoreTicketDetails extends Component {
                 />
               </View>
             </View>
+          ) : null} */}
+
+          {this.state.commercialLicense ? (
+            <>
+              <View style={{ width: "100%", marginTop: 20 }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: "gray",
+                  }}
+                >
+                  How many points do you have on your license?
+                </Text>
+              </View>
+              <View
+                style={{
+                  width: "100%",
+                  flexDirection: "row",
+                  justifyContent: "space-around",
+                  marginTop: 20,
+                  alignItems: "center",
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() =>
+                    this.setState({
+                      violations:
+                        this.state.violations == 1
+                          ? this.state.violations
+                          : this.state.violations - 1,
+                    })
+                  }
+                  style={{
+                    width: 45,
+                    height: 45,
+                    borderRadius: 100,
+                    borderStyle: "solid",
+                    borderWidth: 0.5,
+                    borderColor: "black",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Icon
+                    style={{ fontSize: 20 }}
+                    name="minus"
+                    type="AntDesign"
+                  />
+                </TouchableOpacity>
+
+                <Text
+                  style={{ fontSize: 20, color: "black", fontWeight: "bold" }}
+                >
+                  {this.state.violations}
+                </Text>
+
+                <TouchableOpacity
+                  onPress={() =>
+                    this.setState({
+                      violations: this.state.violations + 1,
+                    })
+                  }
+                  style={{
+                    width: 45,
+                    height: 45,
+                    borderRadius: 100,
+                    // borderStyle: "solid",
+                    // borderWidth: 0.5,
+                    // borderColor: "black",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: Pink,
+                  }}
+                >
+                  <Icon
+                    style={{ color: "white", fontSize: 20 }}
+                    name="plus"
+                    type="AntDesign"
+                  />
+                </TouchableOpacity>
+              </View>
+            </>
           ) : null}
 
           <DatePicker
@@ -309,7 +436,7 @@ export default class MoreTicketDetails extends Component {
         </View>
         <View style={{ width: "90%", marginBottom: 20, alignItems: "center" }}>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("CourtList")}
+            onPress={() => this.props.navigation.navigate("Lawyers")}
             style={{
               width: "100%",
               height: 50,
@@ -319,7 +446,7 @@ export default class MoreTicketDetails extends Component {
               borderRadius: 10,
               marginTop: 20,
             }}
-            disabled={this.state.ticketDate.length > 0 ? false : true}
+            disabled={this.state.typeOfViolation.length > 0 ? false : true}
           >
             <Text style={{ color: "white", fontSize: 17, fontWeight: "bold" }}>
               Continue

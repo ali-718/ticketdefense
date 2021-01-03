@@ -79,6 +79,32 @@ export default class Home extends Component {
     </View>
   );
 
+  tab2 = () => (
+    <View
+      style={{
+        width: "100%",
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <TouchableOpacity
+        onPress={() => this.props.navigation.navigate("States")}
+        style={{
+          width: "90%",
+          height: 50,
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: Pink,
+          borderRadius: 10,
+          marginTop: 20,
+        }}
+      >
+        <Text style={{ color: "white", fontSize: 17 }}>Fight a new ticket</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   render() {
     return (
       <SafeAreaView
@@ -177,7 +203,7 @@ export default class Home extends Component {
               </TabHeading>
             }
           >
-            {this.tab1()}
+            {this.tab2()}
           </Tab>
           <Tab
             tabStyle={{ backgroundColor: Pink }}

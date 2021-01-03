@@ -51,6 +51,7 @@ class Profile extends Component {
     showAlert: false,
     badge: "",
     testImage: "",
+    Address: "",
   };
 
   async componentDidMount() {
@@ -71,7 +72,7 @@ class Profile extends Component {
       Name: "ali haider",
       Email: "alimurtuza718@gmail.com",
       Mobile: "03062888544",
-      Company: "BizIntel",
+      Address: "BizIntel",
     });
   }
 
@@ -193,11 +194,11 @@ class Profile extends Component {
       }, 100);
       return;
     }
-    if (focus == "company") {
-      this.companyInput.blur();
+    if (focus == "address") {
+      this.addressInput.blur();
 
       setTimeout(() => {
-        this.companyInput.focus();
+        this.addressInput.focus();
       }, 100);
       return;
     }
@@ -328,15 +329,15 @@ class Profile extends Component {
           }}
         >
           <Text style={{ fontSize: 15, color: "gray", fontWeight: "bold" }}>
-            Company
+            Address
           </Text>
-          <TouchableOpacity onPress={() => this.FocusOnInput("company")}>
+          <TouchableOpacity onPress={() => this.FocusOnInput("address")}>
             <Text style={{ fontSize: 15, color: Pink }}>Edit</Text>
           </TouchableOpacity>
         </View>
 
         <TextInput
-          ref={(e) => (this.companyInput = e)}
+          ref={(e) => (this.addressInput = e)}
           editable={this.state.TextEdit}
           style={{
             fontSize: 17,
@@ -346,8 +347,8 @@ class Profile extends Component {
             paddingBottom: 10,
             borderColor: "gainsboro",
           }}
-          value={this.state.Company}
-          onChangeText={(val) => this.setState({ Company: val })}
+          value={this.state.Address}
+          onChangeText={(val) => this.setState({ Address: val })}
         ></TextInput>
       </View>
     </View>

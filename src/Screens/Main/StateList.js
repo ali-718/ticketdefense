@@ -93,7 +93,9 @@ export default class StateList extends Component {
             >
               {this.state.states.map((item, i) => (
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate("TicketImage")}
+                  onPress={() =>
+                    this.props.navigation.navigate("MoreTicketDetails")
+                  }
                   key={i}
                   style={{
                     width: "100%",
