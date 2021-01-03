@@ -31,6 +31,16 @@ class Login extends Component {
     loading: false,
   };
 
+  componentDidMount() {
+    const login = this.props.route.params.login;
+
+    console.log(login);
+
+    this.setState({
+      selectedSection: login ? 0 : 1,
+    });
+  }
+
   Signup = () => {
     const { Name, Email, Password, Phone, selectedSection } = this.state;
 
@@ -123,12 +133,13 @@ class Login extends Component {
 
   render() {
     return (
-      <KeyboardAwareScrollView style={{ flex: 1 }}>
+      <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: Pink }}>
         <SafeAreaView
           style={{
             width: "100%",
             height: Dimensions.get("window").height,
             flex: 1,
+            backgroundColor: Pink,
           }}
         >
           <View
@@ -541,7 +552,7 @@ class Login extends Component {
                 width: "100%",
               }}
             >
-              <View
+              {/* <View
                 style={{
                   width: "100%",
                   height: 80,
@@ -591,7 +602,7 @@ class Login extends Component {
                     Sign in with Google
                   </Text>
                 </TouchableOpacity>
-              </View>
+              </View> */}
             </View>
           </View>
         </SafeAreaView>

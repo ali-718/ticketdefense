@@ -11,9 +11,12 @@ import {
   View,
   ScrollView,
 } from "react-native";
+import { connect } from "react-redux";
+import { mapStateToProps } from "../../../config/config";
 import { Pink } from "../../../config/Theme";
+import { removeUser } from "../../../redux/actions/AuthActions";
 
-export default class Settings extends Component {
+class Settings extends Component {
   render() {
     return (
       <SafeAreaView
@@ -116,7 +119,7 @@ export default class Settings extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("TicketImage")}
+            onPress={() => this.props.removeUser()}
             style={{
               width: "100%",
               height: 50,
@@ -143,3 +146,5 @@ export default class Settings extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps, { removeUser })(Settings);

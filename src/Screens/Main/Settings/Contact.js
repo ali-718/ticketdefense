@@ -15,6 +15,8 @@ import {
 } from "react-native";
 import { LightGray, Pink } from "../../../config/Theme";
 import Header from "../../../components/Header";
+import call from "react-native-phone-call";
+import * as MailComposer from "expo-mail-composer";
 
 export default class Contact extends Component {
   render() {
@@ -80,6 +82,70 @@ export default class Contact extends Component {
               Send Message
             </Text>
           </TouchableOpacity>
+
+          <View style={{ width: "100%", marginTop: 30 }}>
+            <Text style={{ fontSize: 22, color: "black", fontWeight: "bold" }}>
+              Email us
+            </Text>
+            <View
+              style={{
+                width: "100%",
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 10,
+              }}
+            >
+              <View style={{ width: 40 }}>
+                <Icon
+                  name="mail"
+                  type="Entypo"
+                  style={{ color: "black", fontSize: 20 }}
+                />
+              </View>
+              <TouchableOpacity
+                onPress={() =>
+                  MailComposer.composeAsync({
+                    recipients: ["alimurtuza718@gmail.com"],
+                  })
+                }
+              >
+                <Text
+                  style={{ color: "blue", textDecorationLine: "underline" }}
+                >
+                  alimurtuza718@gmail.com
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={{ width: "100%", marginTop: 30 }}>
+            <Text style={{ fontSize: 22, color: "black", fontWeight: "bold" }}>
+              Call us
+            </Text>
+            <View
+              style={{
+                width: "100%",
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 10,
+              }}
+            >
+              <View style={{ width: 40 }}>
+                <Icon
+                  name="phone"
+                  type="Entypo"
+                  style={{ color: "black", fontSize: 20 }}
+                />
+              </View>
+              <TouchableOpacity onPress={() => call("+92 3062888544")}>
+                <Text
+                  style={{ color: "blue", textDecorationLine: "underline" }}
+                >
+                  +92 3062888544
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       </SafeAreaView>
     );

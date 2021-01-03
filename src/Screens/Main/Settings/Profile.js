@@ -30,6 +30,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import { LightGray, Pink } from "../../../config/Theme";
 import Header from "../../../components/Header";
+import DatePicker from "react-native-datepicker";
 
 class Profile extends Component {
   state = {
@@ -52,9 +53,13 @@ class Profile extends Component {
     badge: "",
     testImage: "",
     Address: "",
+    dob: "",
+    gender: "",
   };
 
   async componentDidMount() {
+    const user = this.props.auth.user;
+
     await ImagePicker.requestCameraPermissionsAsync();
     await ImagePicker.requestCameraRollPermissionsAsync();
     await Permissions.askAsync(Permissions.CAMERA);
@@ -69,10 +74,10 @@ class Profile extends Component {
     //   Company: "BizIntel",
     // });
     this.setState({
-      Name: "ali haider",
-      Email: "alimurtuza718@gmail.com",
-      Mobile: "03062888544",
-      Address: "BizIntel",
+      Name: user.Name,
+      Email: user.Email,
+      Mobile: user.Phone,
+      Address: user.address,
     });
   }
 
@@ -351,6 +356,53 @@ class Profile extends Component {
           onChangeText={(val) => this.setState({ Address: val })}
         ></TextInput>
       </View>
+
+      <View style={{ width: "100%", marginTop: 30 }}>
+        <View
+          style={{
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontSize: 15, color: "gray", fontWeight: "bold" }}>
+            Date of Birth
+          </Text>
+          <TouchableOpacity onPress={() => this.FocusOnInput("address")}>
+            <Text style={{ fontSize: 15, color: Pink }}>Edit</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity
+          onPress={() => this.ticketDatePicker.onPressDate()}
+          style={{
+            fontSize: 17,
+            color: "black",
+            marginTop: 10,
+            borderBottomWidth: 1,
+            paddingBottom: 10,
+            borderColor: "gainsboro",
+            paddingTop: this.state.dob ? 5 : 10,
+          }}
+        >
+          <Text style={{ color: "black", fontSize: 17 }}>{this.state.dob}</Text>
+        </TouchableOpacity>
+      </View>
+      <DatePicker
+        ref={(e) => (this.ticketDatePicker = e)}
+        style={{ width: 200, opacity: 0 }}
+        date={this.state.dob}
+        mode="date"
+        placeholder="select date"
+        format="YYYY-MM-DD"
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        showIcon={false}
+        onDateChange={(date) => {
+          this.setState({ dob: date });
+        }}
+      />
     </View>
   );
 
@@ -596,4 +648,4 @@ class Profile extends Component {
   }
 }
 
-export default Profile;
+export default connect(mapStateToProps)(Profile);

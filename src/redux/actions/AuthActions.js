@@ -83,8 +83,10 @@ const saveUser = (data) => {
   AsyncStorage.setItem("user", JSON.stringify(data));
 };
 
-const removeUser = () => {
+export const removeUser = () => (dispatch) => {
   AsyncStorage.removeItem("user");
+
+  dispatch({ type: "LOGOUT" });
 };
 
 export const fetchUser = () => (dispatch) =>

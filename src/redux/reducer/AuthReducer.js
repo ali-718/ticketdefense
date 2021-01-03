@@ -11,6 +11,11 @@ export default function (state = initialState, action) {
         ...state,
         user: payload,
       };
+    case "LOGOUT":
+      return {
+        ...state,
+        user: {},
+      };
     default:
       return state;
   }
