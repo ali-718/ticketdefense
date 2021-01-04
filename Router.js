@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+  TransitionSpecs,
+} from "@react-navigation/stack";
 import Splash from "./src/Screens/Auth/Splash";
 import Onboard from "./src/Screens/Auth/Onboard";
 import Login from "./src/Screens/Auth/Login";
@@ -23,7 +27,12 @@ import "./src/config/firebase";
 const Stack = createStackNavigator();
 
 const Auth = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
+  <Stack.Navigator
+    screenOptions={{
+      headerShown: false,
+      cardStyleInterpolator: CardStyleInterpolators.forScaleFromCenterAndroid,
+    }}
+  >
     <Stack.Screen name="splash" component={Splash} />
     <Stack.Screen name="onBoard" component={Onboard} />
     <Stack.Screen name="login" component={Login} />
@@ -51,7 +60,13 @@ class Router extends Component {
   render() {
     return (
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+            cardStyleInterpolator:
+              CardStyleInterpolators.forScaleFromCenterAndroid,
+          }}
+        >
           {this.props.auth?.user?.id ? (
             <Stack.Screen name="Main" component={Main} />
           ) : (

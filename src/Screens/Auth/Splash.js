@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { connect } from "react-redux";
 import { mapStateToProps } from "../../config/config";
@@ -21,7 +21,14 @@ class Splash extends Component {
   }
 
   render() {
-    return <View></View>;
+    return (
+      <View style={{ width: "100%", flex: 1 }}>
+        <Image
+          style={{ width: "100%", flex: 1, resizeMode: "cover" }}
+          source={require("../../../assets/splash.png")}
+        />
+      </View>
+    );
   }
 }
 

@@ -31,6 +31,8 @@ import * as Permissions from "expo-permissions";
 import { LightGray, Pink } from "../../../config/Theme";
 import Header from "../../../components/Header";
 import DatePicker from "react-native-datepicker";
+import * as f from "firebase";
+import { fetch } from "@react-native-community/netinfo";
 
 class Profile extends Component {
   state = {
@@ -61,9 +63,9 @@ class Profile extends Component {
     const user = this.props.auth.user;
 
     await ImagePicker.requestCameraPermissionsAsync();
-    await ImagePicker.requestCameraRollPermissionsAsync();
+    await ImagePicker.requestMediaLibraryPermissionsAsync();
     await Permissions.askAsync(Permissions.CAMERA);
-    await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
 
     // const user = this.props.auth?.user;
 
@@ -129,11 +131,11 @@ class Profile extends Component {
     ImagePicker.launchCameraAsync({
       allowsEditing: true,
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 0.5,
+      quality: 0.1,
       aspect: [4, 5],
       allowsMultipleSelection: false,
     })
-      .then((res) => {
+      .then(async (res) => {
         this.setState({ imageLoading: true });
 
         if (!res.cancelled) {

@@ -118,6 +118,11 @@ export default class Home extends Component {
         }}
       >
         <Tabs
+          onChangeTab={(val) => {
+            if (val.i == 1) {
+              this.props.navigation.navigate("States");
+            }
+          }}
           style={{
             borderBottomWidth: 0,
           }}
@@ -203,7 +208,7 @@ export default class Home extends Component {
               </TabHeading>
             }
           >
-            {this.tab2()}
+            {this.tab1()}
           </Tab>
           <Tab
             tabStyle={{ backgroundColor: Pink }}

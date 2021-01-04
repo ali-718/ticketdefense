@@ -24,14 +24,16 @@ export default class Onboard extends Component {
           justifyContent: "center",
         }}
       >
-        <View style={{ width: "100%" }}>
-          <Text style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>
-            {item.title}
+        <View style={{ width: "90%" }}>
+          <View style={{ width: "100%" }}>
+            <Text style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>
+              {item.title}
+            </Text>
+          </View>
+          <Text style={{ color: "gray", fontSize: 15, marginTop: 10 }}>
+            {item.message}
           </Text>
         </View>
-        <Text style={{ color: "gray", fontSize: 15, marginTop: 10 }}>
-          {item.message}
-        </Text>
       </View>
     );
   };
@@ -90,7 +92,7 @@ export default class Onboard extends Component {
               data={this.state.entries}
               renderItem={this._renderItem}
               sliderWidth={WIDTH}
-              itemWidth={WIDTH - 80}
+              itemWidth={WIDTH}
             />
             <Pagination
               dotsLength={3}
