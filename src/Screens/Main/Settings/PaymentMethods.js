@@ -16,8 +16,10 @@ import {
 import { Pink } from "../../../config/Theme";
 import Header from "../../../components/Header";
 import { TextInputMask } from "react-native-masked-text";
+import * as f from "firebase";
+import { connect } from "react-redux";
 
-export default class PaymentMethods extends Component {
+class PaymentMethods extends Component {
   state = {
     modal: false,
     crediCardNumber: "",
@@ -49,6 +51,18 @@ export default class PaymentMethods extends Component {
     selectPaymentWay: false,
     selectPaymentWayError: false,
   };
+
+  componentDidMount() {
+    const user = this.props.auth.user;
+    f.default
+      .database()
+      .ref("creditcards")
+      .child(user.id)
+      .once("value")
+      .then((res) => {
+        console.log(res.val());
+      });
+  }
 
   render() {
     return (
@@ -430,3 +444,5 @@ export default class PaymentMethods extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(PaymentMethods);
