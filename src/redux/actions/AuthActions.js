@@ -104,3 +104,72 @@ export const fetchUser = () => (dispatch) =>
 
     reject();
   });
+
+export const getUserfromDatabse = (id, image = "") => (dispatch) =>
+  new Promise((resolve, reject) => {
+    f.default
+      .database()
+      .ref(`users/${id}`)
+      .once("value")
+      .then((user) => {
+        dispatch({
+          type: "USER",
+          payload: { ...user.val(), id: user.key, image },
+        });
+        saveUser({ ...user.val(), id: user.key, image });
+        resolve();
+      })
+      .catch((e) => {
+        reject();
+        ToastError("Error", e.message);
+        console.log(e.message);
+      });
+  });
+
+export const updateImage = (uri, data) => (dispatch) =>
+  new Promise((resolve, reject) => {
+    dispatch({ type: "SET_IMAGE", payload: { ...data, image: uri } });
+    saveUser({ ...data, image: uri });
+    resolve();
+  });
+
+export const update = (data, image) => (dispatch) =>
+  new Promise((resolve, reject) => {
+    console.log(data);
+    NetInfo.fetch().then((state) => {
+      if (state.isConnected) {
+        f.default
+          .database()
+          .ref(`users`)
+          .child(data?.id)
+          .update(data)
+          .then((res) => {
+            f.default
+              .database()
+              .ref(`users/${data?.id}`)
+              .once("value")
+              .then((user) => {
+                dispatch({
+                  type: "USER",
+                  payload: { ...user.val(), id: user.key, image },
+                });
+                saveUser({ ...user.val(), id: user.key, image });
+                resolve();
+              })
+              .catch((e) => {
+                reject();
+                ToastError("Error", e.message);
+                console.log(e.message);
+              });
+            // resolve();
+          })
+          .catch((e) => {
+            ToastError("Error", e.message);
+            reject();
+          });
+      } else {
+        ToastError("Network Error", "Kindly check your internet connection!");
+        reject();
+      }
+    });
+  });

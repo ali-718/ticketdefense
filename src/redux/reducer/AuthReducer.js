@@ -11,6 +11,11 @@ export default function (state = initialState, action) {
         ...state,
         user: payload,
       };
+    case "SET_IMAGE":
+      return {
+        ...state,
+        user: payload,
+      };
     case "LOGOUT":
       return {
         ...state,

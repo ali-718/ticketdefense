@@ -25,7 +25,11 @@ import {
   View,
 } from "react-native";
 import { connect } from "react-redux";
-import { mapStateToProps, ToastError } from "../../../config/config";
+import {
+  mapStateToProps,
+  ToastError,
+  ToastSuccess,
+} from "../../../config/config";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import { LightGray, Pink } from "../../../config/Theme";
@@ -33,17 +37,16 @@ import Header from "../../../components/Header";
 import DatePicker from "react-native-datepicker";
 import * as f from "firebase";
 import { fetch } from "@react-native-community/netinfo";
+import { updateImage, update } from "../../../redux/actions/AuthActions";
+import validator from "validator";
 
 class Profile extends Component {
   state = {
-    image:
-      "https://journeypurebowlinggreen.com/wp-content/uploads/2018/05/placeholder-person.jpg",
+    image: "",
     imageModal: false,
     imageLoading: false,
     TextEdit: false,
     Name: "",
-    Description:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
     Email: "",
     Company: "",
     Mobile: "",
@@ -57,6 +60,7 @@ class Profile extends Component {
     Address: "",
     dob: "",
     gender: "",
+    isLoading: false,
   };
 
   async componentDidMount() {
@@ -67,64 +71,15 @@ class Profile extends Component {
     await Permissions.askAsync(Permissions.CAMERA);
     await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
 
-    // const user = this.props.auth?.user;
-
-    // this.setState({
-    //   Name: user?.UserFullNm,
-    //   Email: user?.UserEmail,
-    //   Mobile: user?.UserMobNo,
-    //   Company: "BizIntel",
-    // });
     this.setState({
       Name: user.Name,
       Email: user.Email,
       Mobile: user.Phone,
       Address: user.address,
+      image: user.image?.length > 0 ? user.image : this.state.image,
+      dob: user.dob,
     });
   }
-
-  openGallery = () => {
-    this.setState({ imageModal: false });
-    ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 0.5,
-      aspect: [4, 5],
-      allowsMultipleSelection: false,
-    })
-      .then((res) => {
-        this.setState({ imageLoading: true });
-
-        if (!res.cancelled) {
-          const data = new FormData();
-          data.append("photo", {
-            name: "photo.png",
-            filename: "imageName.png",
-            type: "image/png",
-            uri:
-              Platform.OS === "android"
-                ? res.uri
-                : res.uri.replace("file://", ""),
-          });
-          data.append("Content-Type", "image/png");
-
-          //   this.props
-          //     .UploadProfileImg(this.props.auth?.user?.UserId, data)
-          //     .then(() => {
-          //       this.setState({ imageLoading: false });
-          //     })
-          //     .catch(() => {
-          //       this.setState({ imageLoading: false });
-          //     });
-        }
-      })
-      .catch(() => {
-        ToastError(
-          "Error",
-          "Unable to access your galley, provide permission from app settings"
-        );
-      });
-  };
 
   openCamera = () => {
     this.setState({ imageModal: false });
@@ -151,16 +106,10 @@ class Profile extends Component {
           });
           data.append("Content-Type", "image/png");
 
-          this.setState({ testImage: res.uri, imageLoading: false });
-
-          //   this.props
-          //     .UploadProfileImg(this.props.auth?.user?.UserId, data)
-          //     .then(() => {
-          //       this.setState({ imageLoading: false });
-          //     })
-          //     .catch(() => {
-          //       this.setState({ imageLoading: false });
-          //     });
+          this.setState({ imageLoading: false });
+          this.props.updateImage(res.uri, this.props.auth.user).then(() => {
+            this.setState({ imageLoading: false, image: res.uri });
+          });
         } else {
           this.setState({ imageLoading: false });
         }
@@ -185,14 +134,7 @@ class Profile extends Component {
       }, 100);
       return;
     }
-    if (focus == "description") {
-      this.descriptionInput.blur();
 
-      setTimeout(() => {
-        this.descriptionInput.focus();
-      }, 100);
-      return;
-    }
     if (focus == "name") {
       this.nameInput.blur();
 
@@ -217,10 +159,93 @@ class Profile extends Component {
       }, 100);
       return;
     }
+    if (focus == "dob") {
+      this.ticketDatePicker.onPressDate();
+
+      this.setState({ TextEdit: true });
+      return;
+    }
   };
 
   updateProfile = () => {
     this.setState({ TextEdit: false });
+    const { Name, Email, Mobile, Address, dob, image } = this.state;
+
+    if (
+      validator.isEmpty(Name) ||
+      validator.isEmpty(Email) ||
+      validator.isEmpty(Mobile)
+    ) {
+      alert("Name, Email and Mobile cannot be empty");
+      return;
+    }
+    if (!validator.isEmail(Email)) {
+      alert("Email format is incorrect");
+      return;
+    }
+    if (!validator.isNumeric(Mobile)) {
+      alert("Mobile can only contain numbers");
+      return;
+    }
+
+    this.setState({ isLoading: true });
+
+    this.props
+      .update(
+        {
+          Name,
+          Email,
+          Phone: Mobile,
+          address: Address,
+          dob,
+          id: this.props.auth.user.id,
+        },
+        image
+      )
+      .then(() => {
+        this.setState({ isLoading: false });
+        ToastSuccess("Success", "Profile updated succesfully");
+      })
+      .catch(() => {
+        this.setState({ isLoading: false });
+      });
+  };
+
+  openGallery = () => {
+    this.setState({ imageModal: false });
+    ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 0.5,
+      aspect: [4, 5],
+      allowsMultipleSelection: false,
+    })
+      .then((res) => {
+        this.setState({ imageLoading: true });
+
+        if (!res.cancelled) {
+          const data = new FormData();
+          data.append("photo", {
+            name: "photo.png",
+            filename: "imageName.png",
+            type: "image/png",
+            uri:
+              Platform.OS === "android"
+                ? res.uri
+                : res.uri.replace("file://", ""),
+          });
+          data.append("Content-Type", "image/png");
+          this.props.updateImage(res.uri, this.props.auth.user).then(() => {
+            this.setState({ imageLoading: false, image: res.uri });
+          });
+        }
+      })
+      .catch(() => {
+        ToastError(
+          "Error",
+          "Unable to access your galley, provide permission from app settings"
+        );
+      });
   };
 
   _renderAbout = () => (
@@ -371,7 +396,7 @@ class Profile extends Component {
           <Text style={{ fontSize: 15, color: "gray", fontWeight: "bold" }}>
             Date of Birth
           </Text>
-          <TouchableOpacity onPress={() => this.FocusOnInput("address")}>
+          <TouchableOpacity onPress={() => this.FocusOnInput("dob")}>
             <Text style={{ fontSize: 15, color: Pink }}>Edit</Text>
           </TouchableOpacity>
         </View>
@@ -402,6 +427,7 @@ class Profile extends Component {
         cancelBtnText="Cancel"
         showIcon={false}
         onDateChange={(date) => {
+          console.log(date);
           this.setState({ dob: date });
         }}
       />
@@ -421,6 +447,25 @@ class Profile extends Component {
         }}
       >
         <Header navigation={this.props.navigation} />
+
+        <Modal
+          animationType="slide"
+          transparent
+          onRequestClose={() => null}
+          visible={this.state.isLoading}
+        >
+          <View
+            style={{
+              width: "100%",
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "rgba(0,0,0,0)",
+            }}
+          >
+            <ActivityIndicator size="large" color={Pink} />
+          </View>
+        </Modal>
 
         <Modal
           visible={this.state.imageModal}
@@ -530,22 +575,16 @@ class Profile extends Component {
                   onPress={() => this.setState({ imageModal: true })}
                   style={{
                     padding: 5,
-                    backgroundColor: Pink,
                     borderRadius: 100,
                   }}
                 >
                   <Image
                     style={{ width: 120, height: 120, borderRadius: 100 }}
                     source={
-                      this.state.testImage.length > 0
-                        ? { uri: this.state.testImage }
+                      this.state.image.length > 0
+                        ? { uri: this.state.image }
                         : require("../../../../assets/user.png")
                     }
-                    // source={
-                    //   user?.ProfPicPath
-                    //     ? { uri: user?.ProfPicPath }
-                    //     : require("../../../../assets/user.png")
-                    // }
                   />
                   <View
                     style={{
@@ -650,4 +689,4 @@ class Profile extends Component {
   }
 }
 
-export default connect(mapStateToProps)(Profile);
+export default connect(mapStateToProps, { updateImage, update })(Profile);
