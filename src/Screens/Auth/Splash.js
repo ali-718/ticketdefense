@@ -6,10 +6,10 @@ import { mapStateToProps } from "../../config/config";
 import { fetchUser } from "../../redux/actions/AuthActions";
 import * as Animatable from "react-native-animatable";
 import { Pink } from "../../config/Theme";
+import * as f from "firebase";
 
 class Splash extends Component {
   componentDidMount() {
-    // SplashScreen.preventAutoHideAsync();
     setTimeout(() => {
       this.props
         .fetchUser()

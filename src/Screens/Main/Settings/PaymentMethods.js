@@ -18,6 +18,7 @@ import Header from "../../../components/Header";
 import { TextInputMask } from "react-native-masked-text";
 import * as f from "firebase";
 import { connect } from "react-redux";
+import { mapStateToProps } from "../../../config/config";
 
 class PaymentMethods extends Component {
   state = {
