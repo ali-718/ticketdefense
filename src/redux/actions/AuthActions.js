@@ -135,7 +135,6 @@ export const updateImage = (uri, data) => (dispatch) =>
 
 export const update = (data, image) => (dispatch) =>
   new Promise((resolve, reject) => {
-    console.log(data);
     NetInfo.fetch().then((state) => {
       if (state.isConnected) {
         f.default

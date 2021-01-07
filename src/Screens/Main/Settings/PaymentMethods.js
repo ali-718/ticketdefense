@@ -12,13 +12,15 @@ import {
   ScrollView,
   ImageBackground,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import { Pink } from "../../../config/Theme";
 import Header from "../../../components/Header";
 import { TextInputMask } from "react-native-masked-text";
 import * as f from "firebase";
 import { connect } from "react-redux";
-import { mapStateToProps } from "../../../config/config";
+import { mapStateToProps, ToastSuccess } from "../../../config/config";
+import validator from "validator";
 
 class PaymentMethods extends Component {
   state = {
@@ -51,9 +53,18 @@ class PaymentMethods extends Component {
     paymentLoading: false,
     selectPaymentWay: false,
     selectPaymentWayError: false,
+    creditCards: [],
+    error: false,
+    loading: false,
   };
 
   componentDidMount() {
+    this.fetchCreditCards();
+  }
+
+  fetchCreditCards = () => {
+    this.setState({ loading: true, error: false });
+    const data = [];
     const user = this.props.auth.user;
     f.default
       .database()
@@ -61,9 +72,101 @@ class PaymentMethods extends Component {
       .child(user.id)
       .once("value")
       .then((res) => {
-        console.log(res.val());
+        res.forEach((item, i) => {
+          data.push({ ...item.val(), id: item.key });
+        });
+      })
+      .then(() => {
+        this.setState({ creditCards: data, loading: false, error: false });
+      })
+      .catch(() => {
+        this.setState({ loading: false, error: true });
       });
-  }
+  };
+
+  saveCreditCard = () => {
+    if (
+      validator.isEmpty(`${this.state.crediCardNumber}`) ||
+      !validator.isLength(this.state.crediCardNumber, 19) ||
+      validator.isEmpty(this.state.name) ||
+      validator.isEmpty(`${this.state.cvv}`) ||
+      !validator.isLength(this.state.cvv, 3) ||
+      validator.isEmpty(this.state.date) ||
+      !validator.isLength(this.state.date, 5)
+    ) {
+      if (!validator.isLength(this.state.crediCardNumber, 19)) {
+        this.setState({
+          crediCardNumberErrorMessage: "Invalid credit card format",
+          crediCardNumberError: true,
+        });
+      }
+
+      if (validator.isEmpty(this.state.crediCardNumber)) {
+        this.setState({
+          crediCardNumberErrorMessage: "Enter credit card number",
+          crediCardNumberError: true,
+        });
+      }
+
+      if (validator.isEmpty(this.state.name)) {
+        this.setState({
+          nameErrorMessage: "Enter your name",
+          nameError: true,
+        });
+      }
+
+      if (!validator.isLength(this.state.cvv, 3)) {
+        this.setState({
+          cvvErrorMessage: "Invalid CVV format",
+          cvvError: true,
+        });
+      }
+
+      if (validator.isEmpty(this.state.cvv)) {
+        this.setState({
+          cvvErrorMessage: "Enter CVV",
+          cvvError: true,
+        });
+      }
+
+      if (!validator.isLength(this.state.date, 5)) {
+        this.setState({
+          dateErrorMessage: "Invalid date format",
+          dateError: true,
+        });
+      }
+
+      if (validator.isEmpty(this.state.date)) {
+        this.setState({
+          dateErrorMessage: "Enter date",
+          dateError: true,
+        });
+      }
+
+      return;
+    }
+
+    const user = this.props.auth.user;
+    const { crediCardNumber, name, cvv, date } = this.state;
+    const data = { crediCardNumber, name, cvv, date };
+
+    this.setState({ paymentLoading: true });
+
+    f.default
+      .database()
+      .ref("creditcards")
+      .child(user.id)
+      .push(data)
+      .then(() => {
+        ToastSuccess("Success", "Creditcard added successfully");
+        this.setState({ paymentLoading: false, modal: false });
+        this.fetchCreditCards();
+      })
+      .catch(() => {
+        ToastSuccess("Error", "Some error Occoured, please try again");
+        this.setState({ paymentLoading: false });
+      });
+  };
 
   render() {
     return (
@@ -344,6 +447,7 @@ class PaymentMethods extends Component {
                     ) : (
                       <>
                         <TouchableOpacity
+                          onPress={() => this.saveCreditCard()}
                           style={{
                             width: "100%",
                             padding: 15,
@@ -395,26 +499,151 @@ class PaymentMethods extends Component {
             </Text>
           </View>
         </View>
+        {this.state.creditCards.length > 0 ? (
+          <ScrollView style={{ width: "100%" }}>
+            <View style={{ width: "100%", alignItems: "center" }}>
+              <View style={{ width: "90%" }}>
+                {this.state.creditCards.map((item, i) => (
+                  <View
+                    style={{
+                      width: "100%",
+                      padding: 10,
+                      shadowColor: "#000",
+                      shadowOffset: {
+                        width: 0,
+                        height: 3,
+                      },
+                      shadowOpacity: 0.27,
+                      shadowRadius: 4.65,
 
-        <View
-          style={{
-            width: "100%",
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text
+                      elevation: 6,
+                      backgroundColor: "white",
+                      marginTop: 20,
+                      borderRadius: 10,
+                    }}
+                  >
+                    <View
+                      style={{
+                        width: "100%",
+                        alignItems: "center",
+                        flexDirection: "row",
+                      }}
+                    >
+                      <Icon
+                        name="credit-card-alt"
+                        type="FontAwesome"
+                        style={{ fontSize: 20 }}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: "black",
+                          fontWeight: "bold",
+                          marginLeft: 10,
+                        }}
+                      >
+                        {item.crediCardNumber}
+                      </Text>
+                    </View>
+                    <Text
+                      style={{ fontSize: 16, color: "gray", marginTop: 10 }}
+                    >
+                      Name :{" "}
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: "black",
+                        }}
+                      >
+                        {item.name}
+                      </Text>
+                    </Text>
+                    <Text
+                      style={{ fontSize: 16, color: "gray", marginTop: 10 }}
+                    >
+                      CVV :{" "}
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: "black",
+                        }}
+                      >
+                        {item.cvv}
+                      </Text>
+                    </Text>
+                    <Text
+                      style={{ fontSize: 16, color: "gray", marginTop: 10 }}
+                    >
+                      Date :{" "}
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: "black",
+                        }}
+                      >
+                        {item.date}
+                      </Text>
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </ScrollView>
+        ) : this.state.error ? (
+          <View
             style={{
-              fontSize: 15,
-              color: "gray",
-              width: "90%",
+              width: "100%",
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            When did you get your ticket? You dont have any payment methods
-            saved...!
-          </Text>
-        </View>
+            <Text style={{ fontSize: 20 }}>Some error occoured</Text>
+            <TouchableOpacity
+              onPress={() => this.fetchCreditCards()}
+              style={{
+                padding: 10,
+                paddingHorizontal: 20,
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: Pink,
+              }}
+            >
+              <Text style={{ color: "white" }}>retry</Text>
+            </TouchableOpacity>
+          </View>
+        ) : !this.state.error && this.state.creditCards.length == 0 ? (
+          <View
+            style={{
+              width: "100%",
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 15,
+                color: "gray",
+                width: "90%",
+              }}
+            >
+              You dont have any payment methods saved...!
+            </Text>
+          </View>
+        ) : (
+          <View
+            style={{
+              width: "100%",
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <ActivityIndicator size="large" color={Pink} />
+          </View>
+        )}
+
         <View
           style={{
             width: "100%",

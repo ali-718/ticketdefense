@@ -15,16 +15,34 @@ import { LightGray, Pink } from "../../config/Theme";
 import DatePicker from "react-native-datepicker";
 import ToggleSwitch from "toggle-switch-react-native";
 import { Icon } from "native-base";
+import {
+  setLicensePoints,
+  setViolationType,
+} from "../../redux/actions/HomeActions";
+import { connect } from "react-redux";
+import { mapStateToProps } from "../../config/config";
 
-export default class MoreTicketDetails extends Component {
+class MoreTicketDetails extends Component {
   state = {
     ticketDate: "",
     courtDate: "",
     accident: false,
     commercialLicense: false,
     drivingCommercialVehicle: false,
-    violations: 0,
+    violations: 1,
     typeOfViolation: "",
+  };
+
+  continue = () => {
+    this.props.setViolationType(this.state.typeOfViolation);
+
+    if (this.state.commercialLicense) {
+      this.props.setLicensePoints(this.state.violations);
+    } else {
+      this.props.setLicensePoints(0);
+    }
+
+    this.props.navigation.navigate("Lawyers");
   };
 
   render() {
@@ -436,7 +454,7 @@ export default class MoreTicketDetails extends Component {
         </View>
         <View style={{ width: "90%", marginBottom: 20, alignItems: "center" }}>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("Lawyers")}
+            onPress={() => this.continue()}
             style={{
               width: "100%",
               height: 50,
@@ -457,3 +475,7 @@ export default class MoreTicketDetails extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps, { setLicensePoints, setViolationType })(
+  MoreTicketDetails
+);

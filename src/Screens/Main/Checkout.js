@@ -16,8 +16,10 @@ import {
 import Header from "../../components/Header";
 import { Pink } from "../../config/Theme";
 import { TextInputMask } from "react-native-masked-text";
+import { connect } from "react-redux";
+import { mapStateToProps } from "../../config/config";
 
-export default class Checkout extends Component {
+class Checkout extends Component {
   state = {
     paymentModal: false,
     crediCardNumber: "",
@@ -371,8 +373,9 @@ export default class Checkout extends Component {
                 width: "100%",
               }}
             >
-              You are one step away from being matched with local Arkansas
-              attorney who will contest your ticket in court
+              You are one step away from being matched with local{" "}
+              {this.props.auth.ticket?.state} attorney who will contest your
+              ticket in court
             </Text>
           </View>
 
@@ -496,3 +499,5 @@ export default class Checkout extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(Checkout);

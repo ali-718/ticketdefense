@@ -9,10 +9,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { connect } from "react-redux";
 import Header from "../../components/Header";
+import { mapStateToProps } from "../../config/config";
 import { stateList } from "../../config/states";
+import { setUSState } from "../../redux/actions/HomeActions";
 
-export default class StateList extends Component {
+class StateList extends Component {
   state = {
     states: [],
   };
@@ -93,9 +96,10 @@ export default class StateList extends Component {
             >
               {this.state.states.map((item, i) => (
                 <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate("MoreTicketDetails")
-                  }
+                  onPress={() => {
+                    this.props.setUSState(item.text);
+                    this.props.navigation.navigate("MoreTicketDetails");
+                  }}
                   key={i}
                   style={{
                     width: "100%",
@@ -126,3 +130,5 @@ export default class StateList extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps, { setUSState })(StateList);

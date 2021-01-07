@@ -7,6 +7,7 @@ import { fetchUser } from "../../redux/actions/AuthActions";
 import * as Animatable from "react-native-animatable";
 import { Pink } from "../../config/Theme";
 import * as f from "firebase";
+import { getLawyers } from "../../redux/actions/HomeActions";
 
 class Splash extends Component {
   componentDidMount() {
@@ -45,4 +46,4 @@ class Splash extends Component {
   }
 }
 
-export default connect(mapStateToProps, { fetchUser })(Splash);
+export default connect(mapStateToProps, { fetchUser, getLawyers })(Splash);

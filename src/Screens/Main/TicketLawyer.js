@@ -1,6 +1,7 @@
 import { Icon } from "native-base";
 import React, { Component } from "react";
 import {
+  ActivityIndicator,
   Image,
   SafeAreaView,
   ScrollView,
@@ -10,29 +11,56 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { connect } from "react-redux";
 import Header from "../../components/Header";
-import { Lawyers } from "../../config/Lawyers";
+import { mapStateToProps } from "../../config/config";
 import { Pink } from "../../config/Theme";
+import { getLawyers, setLawyer } from "../../redux/actions/HomeActions";
 
-export default class TicketLawyer extends Component {
+class TicketLawyer extends Component {
   state = {
     lawyers: [],
+    loading: false,
+    error: false,
+    allLawyers: [],
   };
 
   componentDidMount() {
-    this.setState({
-      lawyers: Lawyers,
-    });
+    this.props
+      .getLawyers()
+      .then((res) => {
+        this.setState({
+          allLawyers: res,
+          lawyers: res,
+          loading: false,
+          error: false,
+        });
+      })
+      .catch((e) => {
+        this.setState({
+          allLawyers: [],
+          lawyers: [],
+          loading: false,
+          error: true,
+        });
+      });
   }
 
   search = (text) => {
     const keyword = text?.toLowerCase();
-    const realData = Lawyers;
-    const finalData = realData.filter((item) =>
-      item.name?.toLowerCase()?.includes(keyword)
+    const realData = this.state.allLawyers;
+    const finalData = realData.filter(
+      (item) => item.name?.toLowerCase()?.includes(keyword)
+      // &&
+      // item.state?.toLowerCase() == this.props.auth.ticket?.state.toLowerCase()
     );
 
     this.setState({ lawyers: finalData });
+  };
+
+  constinue = (item) => {
+    this.props.setLawyer(item);
+    this.props.navigation.navigate("Checkout");
   };
 
   render() {
@@ -89,101 +117,184 @@ export default class TicketLawyer extends Component {
             </View>
 
             {/* states */}
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              style={{ width: "100%", paddingBottom: 20 }}
-            >
-              {this.state.lawyers.map((item, i) => (
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate("Checkout")}
-                  key={i}
-                  style={{
-                    width: "100%",
-                    // height: 50,
-                    flexDirection: "row",
-                    borderColor: "gainsboro",
-                    borderStyle: "solid",
-                    borderBottomWidth: 0.5,
-                    justifyContent: "space-between",
+            {this.state.lawyers.length > 0 ? (
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                style={{ width: "100%", paddingBottom: 20 }}
+              >
+                {this.state.lawyers.filter(
+                  (item) =>
+                    item.state?.toLowerCase() ==
+                    this.props.auth.ticket?.state.toLowerCase()
+                ).length > 0 ? (
+                  this.state.lawyers
+                    .filter(
+                      (item) =>
+                        item.state?.toLowerCase() ==
+                        this.props.auth.ticket?.state.toLowerCase()
+                    )
+                    .map((item, i) => (
+                      <TouchableOpacity
+                        onPress={() => this.constinue(item)}
+                        key={i}
+                        style={{
+                          width: "100%",
+                          // height: 50,
+                          flexDirection: "row",
+                          borderColor: "gainsboro",
+                          borderStyle: "solid",
+                          borderBottomWidth: 0.5,
+                          justifyContent: "space-between",
 
-                    alignItems: "center",
-                    marginTop: 20,
-                    paddingBottom: 10,
-                  }}
-                >
+                          alignItems: "center",
+                          marginTop: 20,
+                          paddingBottom: 10,
+                        }}
+                      >
+                        <View
+                          style={{
+                            width: 70,
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <Image
+                            style={{ width: 60, height: 60, borderRadius: 100 }}
+                            source={{ uri: item.image }}
+                          />
+                        </View>
+                        <View style={{ flex: 1, marginLeft: 5 }}>
+                          <Text
+                            numberOfLines={1}
+                            style={{
+                              color: "black",
+                              fontSize: 13,
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {item.name}
+                          </Text>
+                          <Text
+                            numberOfLines={3}
+                            style={{
+                              color: "gray",
+                              marginTop: 5,
+                              fontSize: 13,
+                            }}
+                          >
+                            {item.state}
+                          </Text>
+                          <Text
+                            numberOfLines={3}
+                            style={{
+                              marginTop: 5,
+                              fontSize: 13,
+                              color: "green",
+                            }}
+                          >
+                            100% Moneyback Guarantee
+                          </Text>
+                          <View
+                            style={{
+                              width: "100%",
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                              marginTop: 0,
+                            }}
+                          >
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Icon
+                                name="star"
+                                type="Entypo"
+                                style={{ color: "#ffd700", fontSize: 15 }}
+                              />
+                              <Text style={{ color: "#ffd700", fontSize: 12 }}>
+                                {" "}
+                                0.0
+                              </Text>
+                              <Text style={{ color: "gray", fontSize: 12 }}>
+                                {" "}
+                                (0)
+                              </Text>
+                            </View>
+
+                            <View style={{ alignItems: "center" }}>
+                              <Text style={{ color: Pink, fontSize: 10 }}>
+                                Total Rate
+                              </Text>
+                              <Text
+                                style={{
+                                  color: Pink,
+                                  marginTop: 1,
+                                  fontSize: 12,
+                                }}
+                              >
+                                ${item.price}
+                              </Text>
+                            </View>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    ))
+                ) : (
                   <View
                     style={{
-                      width: 70,
+                      width: "100%",
                       alignItems: "center",
-                      justifyContent: "center",
+                      marginTop: 30,
                     }}
                   >
-                    <Image
-                      style={{ width: 60, height: 60, borderRadius: 100 }}
-                      source={{ uri: item.image }}
-                    />
+                    <Text>No lawyers present in current state...!</Text>
                   </View>
-                  <View style={{ flex: 1, marginLeft: 5 }}>
-                    <Text
-                      numberOfLines={1}
-                      style={{
-                        color: "black",
-                        fontSize: 10,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {item.name}
-                    </Text>
-                    <Text
-                      numberOfLines={3}
-                      style={{ color: "gray", marginTop: 5, fontSize: 10 }}
-                    >
-                      {item.description}
-                    </Text>
-                    <View
-                      style={{
-                        width: "100%",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        marginTop: 10,
-                      }}
-                    >
-                      <View
-                        style={{ flexDirection: "row", alignItems: "center" }}
-                      >
-                        <Icon
-                          name="star"
-                          type="Entypo"
-                          style={{ color: "#ffd700", fontSize: 15 }}
-                        />
-                        <Text style={{ color: "#ffd700", fontSize: 12 }}>
-                          {" "}
-                          0.0
-                        </Text>
-                        <Text style={{ color: "gray", fontSize: 12 }}>
-                          {" "}
-                          (0)
-                        </Text>
-                      </View>
-
-                      <View style={{ alignItems: "center" }}>
-                        <Text style={{ color: Pink, fontSize: 10 }}>
-                          Total Rate
-                        </Text>
-                        <Text
-                          style={{ color: Pink, marginTop: 1, fontSize: 12 }}
-                        >
-                          ${item.rate}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
+                )}
+              </ScrollView>
+            ) : this.state.error ? (
+              <View
+                style={{
+                  width: "100%",
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text style={{ fontSize: 20 }}>Some error occoured</Text>
+                <TouchableOpacity
+                  style={{
+                    padding: 10,
+                    paddingHorizontal: 20,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: Pink,
+                  }}
+                >
+                  <Text style={{ color: "white" }}>retry</Text>
                 </TouchableOpacity>
-              ))}
-            </ScrollView>
+              </View>
+            ) : (
+              <View
+                style={{
+                  width: "100%",
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <ActivityIndicator size="large" color={Pink} />
+                <Text style={{ marginTop: 10 }}>Loading</Text>
+              </View>
+            )}
           </View>
         </View>
       </SafeAreaView>
     );
   }
 }
+
+export default connect(mapStateToProps, { getLawyers, setLawyer })(
+  TicketLawyer
+);
