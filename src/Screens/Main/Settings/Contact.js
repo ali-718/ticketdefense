@@ -64,7 +64,7 @@ export default class Contact extends Component {
               borderWidth: 0.5,
               marginTop: 10,
             }}
-            placeholder="Enter your message here"
+            placeholder={`Enter your message here`}
             rowSpan={5}
           />
           <TouchableOpacity
@@ -99,7 +99,7 @@ export default class Contact extends Component {
                 <Icon
                   name="mail"
                   type="Entypo"
-                  style={{ color: "black", fontSize: 20 }}
+                  style={{ color: "gray", fontSize: 20 }}
                 />
               </View>
               <TouchableOpacity
@@ -109,9 +109,7 @@ export default class Contact extends Component {
                   })
                 }
               >
-                <Text
-                  style={{ color: "blue", textDecorationLine: "underline" }}
-                >
+                <Text style={{ color: Pink, textDecorationLine: "underline" }}>
                   alimurtuza718@gmail.com
                 </Text>
               </TouchableOpacity>
@@ -134,13 +132,11 @@ export default class Contact extends Component {
                 <Icon
                   name="phone"
                   type="Entypo"
-                  style={{ color: "black", fontSize: 20 }}
+                  style={{ color: "gray", fontSize: 20 }}
                 />
               </View>
               <TouchableOpacity onPress={() => call("+92 3062888544")}>
-                <Text
-                  style={{ color: "blue", textDecorationLine: "underline" }}
-                >
+                <Text style={{ color: Pink, textDecorationLine: "underline" }}>
                   +92 3062888544
                 </Text>
               </TouchableOpacity>

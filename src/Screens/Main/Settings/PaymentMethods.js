@@ -505,85 +505,70 @@ class PaymentMethods extends Component {
               <View style={{ width: "90%" }}>
                 {this.state.creditCards.map((item, i) => (
                   <View
+                    key={i}
                     style={{
                       width: "100%",
-                      padding: 10,
                       shadowColor: "#000",
                       shadowOffset: {
                         width: 0,
-                        height: 3,
+                        height: 1,
                       },
-                      shadowOpacity: 0.27,
-                      shadowRadius: 4.65,
+                      shadowOpacity: 0.22,
+                      shadowRadius: 2.22,
 
-                      elevation: 6,
-                      backgroundColor: "white",
-                      marginTop: 20,
-                      borderRadius: 10,
+                      elevation: 3,
+                      marginTop: 10,
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
                   >
-                    <View
-                      style={{
-                        width: "100%",
-                        alignItems: "center",
-                        flexDirection: "row",
-                      }}
+                    <ImageBackground
+                      style={{ width: "100%", height: 200 }}
+                      resizeMode="contain"
+                      source={require("../../../../assets/creditCard.png")}
                     >
-                      <Icon
-                        name="credit-card-alt"
-                        type="FontAwesome"
-                        style={{ fontSize: 20 }}
-                      />
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          color: "black",
-                          fontWeight: "bold",
-                          marginLeft: 10,
-                        }}
-                      >
-                        {item.crediCardNumber}
-                      </Text>
-                    </View>
-                    <Text
-                      style={{ fontSize: 16, color: "gray", marginTop: 10 }}
-                    >
-                      Name :{" "}
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          color: "black",
-                        }}
-                      >
-                        {item.name}
-                      </Text>
-                    </Text>
-                    <Text
-                      style={{ fontSize: 16, color: "gray", marginTop: 10 }}
-                    >
-                      CVV :{" "}
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          color: "black",
-                        }}
-                      >
-                        {item.cvv}
-                      </Text>
-                    </Text>
-                    <Text
-                      style={{ fontSize: 16, color: "gray", marginTop: 10 }}
-                    >
-                      Date :{" "}
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          color: "black",
-                        }}
-                      >
-                        {item.date}
-                      </Text>
-                    </Text>
+                      <View style={{ width: "100%", flex: 1 }}>
+                        <View style={{ marginTop: 80, marginLeft: 30 }}>
+                          <Text
+                            style={{
+                              color: "white",
+                              fontSize: 17,
+                            }}
+                          >
+                            {item.crediCardNumber}
+                          </Text>
+
+                          <View
+                            style={{
+                              width: "90%",
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                              marginTop: 40,
+                              alignItems: "center",
+                            }}
+                          >
+                            <Text
+                              style={{
+                                color: "white",
+                                fontSize: 13,
+                              }}
+                            >
+                              {item.date}
+                            </Text>
+                            <Text
+                              style={{
+                                color: "white",
+                                fontSize: 13,
+                              }}
+                            >
+                              {item.name?.length > 22
+                                ? `${item.name?.slice(0, 22)}...`
+                                : item.name}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    </ImageBackground>
                   </View>
                 ))}
               </View>
@@ -612,7 +597,9 @@ class PaymentMethods extends Component {
               <Text style={{ color: "white" }}>retry</Text>
             </TouchableOpacity>
           </View>
-        ) : !this.state.error && this.state.creditCards.length == 0 ? (
+        ) : !this.state.error &&
+          this.state.creditCards.length == 0 &&
+          !this.state.loading ? (
           <View
             style={{
               width: "100%",

@@ -12,12 +12,14 @@ import {
   ScrollView,
   ImageBackground,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import Header from "../../components/Header";
 import { Pink } from "../../config/Theme";
 import { TextInputMask } from "react-native-masked-text";
 import { connect } from "react-redux";
 import { mapStateToProps } from "../../config/config";
+import * as f from "firebase";
 
 class Checkout extends Component {
   state = {
@@ -34,6 +36,40 @@ class Checkout extends Component {
     cvv: "",
     cvvError: false,
     cvvErrorMessage: "",
+    Cardloading: true,
+    CardError: false,
+    creditCards: [],
+    existingCardModal: false,
+  };
+
+  componentDidMount() {
+    this.fetchCreditCards();
+  }
+
+  fetchCreditCards = () => {
+    this.setState({ Cardloading: true, CardError: false });
+    const data = [];
+    const user = this.props.auth.user;
+    f.default
+      .database()
+      .ref("creditcards")
+      .child(user.id)
+      .once("value")
+      .then((res) => {
+        res.forEach((item, i) => {
+          data.push({ ...item.val(), id: item.key });
+        });
+      })
+      .then(() => {
+        this.setState({
+          creditCards: data,
+          Cardloading: false,
+          CardError: false,
+        });
+      })
+      .catch(() => {
+        this.setState({ Cardloading: false, CardError: true });
+      });
   };
 
   render() {
@@ -47,6 +83,172 @@ class Checkout extends Component {
           alignItems: "center",
         }}
       >
+        <Modal visible={this.state.existingCardModal} animationType="slide">
+          <SafeAreaView
+            style={{ width: "100%", flex: 1, alignItems: "center" }}
+          >
+            {this.state.creditCards.length > 0 ? (
+              <ScrollView style={{ width: "100%" }}>
+                <View
+                  style={{ width: "100%", alignItems: "center", marginTop: 10 }}
+                >
+                  <Text
+                    style={{ fontSize: 20, color: "black", fontWeight: "bold" }}
+                  >
+                    My Credit cards
+                  </Text>
+                  <View style={{ width: "90%" }}>
+                    {this.state.creditCards.map((item, i) => (
+                      <View
+                        key={i}
+                        style={{
+                          width: "100%",
+                          shadowColor: "#000",
+                          shadowOffset: {
+                            width: 0,
+                            height: 1,
+                          },
+                          shadowOpacity: 0.22,
+                          shadowRadius: 2.22,
+
+                          elevation: 3,
+                          marginTop: 10,
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <ImageBackground
+                          style={{ width: "100%", height: 200 }}
+                          resizeMode="contain"
+                          source={require("../../../assets/creditCard.png")}
+                        >
+                          <View style={{ width: "100%", flex: 1 }}>
+                            <View style={{ marginTop: 80, marginLeft: 30 }}>
+                              <Text
+                                style={{
+                                  color: "white",
+                                  fontSize: 17,
+                                }}
+                              >
+                                {item.crediCardNumber}
+                              </Text>
+
+                              <View
+                                style={{
+                                  width: "90%",
+                                  flexDirection: "row",
+                                  justifyContent: "space-between",
+                                  marginTop: 40,
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    color: "white",
+                                    fontSize: 13,
+                                  }}
+                                >
+                                  {item.date}
+                                </Text>
+                                <Text
+                                  style={{
+                                    color: "white",
+                                    fontSize: 13,
+                                  }}
+                                >
+                                  {item.name?.length > 22
+                                    ? `${item.name?.slice(0, 22)}...`
+                                    : item.name}
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+                        </ImageBackground>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              </ScrollView>
+            ) : this.state.CardError ? (
+              <View
+                style={{
+                  width: "100%",
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text style={{ fontSize: 20 }}>Some error occoured</Text>
+                <TouchableOpacity
+                  onPress={() => this.fetchCreditCards()}
+                  style={{
+                    padding: 10,
+                    paddingHorizontal: 20,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: Pink,
+                  }}
+                >
+                  <Text style={{ color: "white" }}>retry</Text>
+                </TouchableOpacity>
+              </View>
+            ) : !this.state.CardError &&
+              this.state.creditCards.length == 0 &&
+              !this.state.Cardloading ? (
+              <View
+                style={{
+                  width: "100%",
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 15,
+                    color: "gray",
+                    width: "90%",
+                  }}
+                >
+                  You dont have any payment methods saved...!
+                </Text>
+              </View>
+            ) : (
+              <View
+                style={{
+                  width: "100%",
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <ActivityIndicator size="large" color={Pink} />
+              </View>
+            )}
+            <View
+              style={{
+                width: "100%",
+                height: 60,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => this.setState({ existingCardModal: false })}
+                style={{ alignSelf: "center" }}
+              >
+                <Text
+                  style={{
+                    color: "red",
+                    textDecorationLine: "underline",
+                  }}
+                >
+                  cancel
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </SafeAreaView>
+        </Modal>
         <Modal visible={this.state.paymentModal} animationType="slide">
           <ScrollView
             showsVerticalScrollIndicator={false}
@@ -325,7 +527,7 @@ class Checkout extends Component {
                           }}
                         >
                           <Text style={{ color: "white", fontWeight: "bold" }}>
-                            Make payment
+                            Pay now
                           </Text>
                         </TouchableOpacity>
 
@@ -475,24 +677,61 @@ class Checkout extends Component {
               </Text>
             </View>
 
-            <TouchableOpacity
-              onPress={() => this.setState({ paymentModal: true })}
-              style={{
-                width: "100%",
-                height: 50,
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: Pink,
-                borderRadius: 10,
-                marginTop: 30,
-              }}
-            >
+            <View style={{ width: "100%", marginTop: 40 }}>
               <Text
-                style={{ color: "white", fontSize: 17, fontWeight: "bold" }}
+                style={{ fontSize: 16, color: "black", fontWeight: "bold" }}
               >
-                Pay now
+                Payment options
               </Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.setState({ paymentModal: true })}
+                style={{
+                  width: "100%",
+                  height: 50,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: Pink,
+                  borderRadius: 10,
+                  marginTop: 20,
+                }}
+              >
+                <Text
+                  style={{ color: "white", fontSize: 17, fontWeight: "bold" }}
+                >
+                  Add new card
+                </Text>
+              </TouchableOpacity>
+
+              <Text
+                style={{
+                  fontSize: 15,
+                  marginVertical: 20,
+                  color: "gray",
+                  width: "100%",
+                  textAlign: "center",
+                }}
+              >
+                or
+              </Text>
+
+              <TouchableOpacity
+                onPress={() => this.setState({ existingCardModal: true })}
+                style={{
+                  width: "100%",
+                  height: 50,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 10,
+                  borderColor: Pink,
+                  borderWidth: 1,
+                  borderStyle: "solid",
+                }}
+              >
+                <Text style={{ color: Pink, fontSize: 17, fontWeight: "bold" }}>
+                  Select from existing card
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </SafeAreaView>

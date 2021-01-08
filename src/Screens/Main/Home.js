@@ -118,6 +118,7 @@ export default class Home extends Component {
         }}
       >
         <Tabs
+          locked
           onChangeTab={(val) => {
             if (val.i == 1) {
               this.props.navigation.navigate("States");
