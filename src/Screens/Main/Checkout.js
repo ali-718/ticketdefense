@@ -20,6 +20,7 @@ import { TextInputMask } from "react-native-masked-text";
 import { connect } from "react-redux";
 import { mapStateToProps } from "../../config/config";
 import * as f from "firebase";
+import { createToken } from "../../redux/actions/HomeActions";
 
 class Checkout extends Component {
   state = {
@@ -40,11 +41,18 @@ class Checkout extends Component {
     CardError: false,
     creditCards: [],
     existingCardModal: false,
+    selectedCard: {},
   };
 
   componentDidMount() {
     this.fetchCreditCards();
   }
+
+  processPayment = () => {
+    if (this.state.selectedCard?.id) {
+      this.props.createToken(this.state.selectedCard);
+    }
+  };
 
   fetchCreditCards = () => {
     this.setState({ Cardloading: true, CardError: false });
@@ -83,7 +91,11 @@ class Checkout extends Component {
           alignItems: "center",
         }}
       >
-        <Modal visible={this.state.existingCardModal} animationType="slide">
+        <Modal
+          onRequestClose={() => null}
+          visible={this.state.existingCardModal}
+          animationType="slide"
+        >
           <SafeAreaView
             style={{ width: "100%", flex: 1, alignItems: "center" }}
           >
@@ -99,24 +111,50 @@ class Checkout extends Component {
                   </Text>
                   <View style={{ width: "90%" }}>
                     {this.state.creditCards.map((item, i) => (
-                      <View
+                      <TouchableOpacity
+                        onPress={() => this.setState({ selectedCard: item })}
                         key={i}
-                        style={{
-                          width: "100%",
-                          shadowColor: "#000",
-                          shadowOffset: {
-                            width: 0,
-                            height: 1,
-                          },
-                          shadowOpacity: 0.22,
-                          shadowRadius: 2.22,
+                        style={
+                          this.state.selectedCard?.id == item.id
+                            ? {
+                                width: "100%",
+                                shadowColor: "#000",
+                                shadowOffset: {
+                                  width: 0,
+                                  height: 1,
+                                },
+                                shadowOpacity: 0.22,
+                                shadowRadius: 2.22,
 
-                          elevation: 3,
-                          marginTop: 10,
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
+                                elevation: 3,
+                                marginTop: 10,
+                                alignItems: "center",
+                              }
+                            : {
+                                width: "100%",
+
+                                marginTop: 10,
+                                alignItems: "center",
+                              }
+                        }
                       >
+                        {this.state.selectedCard?.id == item.id ? (
+                          <View
+                            style={{
+                              width: "100%",
+                              position: "absolute",
+                              alignItems: "flex-end",
+                              zIndex: 99,
+                              padding: 10,
+                            }}
+                          >
+                            <Image
+                              style={{ width: 30, height: 30 }}
+                              resizeMode="contain"
+                              source={require("../../../assets/checked.png")}
+                            />
+                          </View>
+                        ) : null}
                         <ImageBackground
                           style={{ width: "100%", height: 200 }}
                           resizeMode="contain"
@@ -164,7 +202,7 @@ class Checkout extends Component {
                             </View>
                           </View>
                         </ImageBackground>
-                      </View>
+                      </TouchableOpacity>
                     ))}
                   </View>
                 </View>
@@ -228,13 +266,33 @@ class Checkout extends Component {
             <View
               style={{
                 width: "100%",
-                height: 60,
                 alignItems: "center",
                 justifyContent: "center",
+                padding: 20,
               }}
             >
+              {this.state.selectedCard?.id ? (
+                <TouchableOpacity
+                  onPress={() => this.processPayment()}
+                  style={{
+                    width: "100%",
+                    padding: 15,
+                    borderRadius: 10,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: Pink,
+                    marginBottom: 15,
+                  }}
+                >
+                  <Text style={{ color: "white", fontWeight: "bold" }}>
+                    Pay now
+                  </Text>
+                </TouchableOpacity>
+              ) : null}
               <TouchableOpacity
-                onPress={() => this.setState({ existingCardModal: false })}
+                onPress={() =>
+                  this.setState({ existingCardModal: false, selectedCard: {} })
+                }
                 style={{ alignSelf: "center" }}
               >
                 <Text
@@ -739,4 +797,4 @@ class Checkout extends Component {
   }
 }
 
-export default connect(mapStateToProps)(Checkout);
+export default connect(mapStateToProps, { createToken })(Checkout);

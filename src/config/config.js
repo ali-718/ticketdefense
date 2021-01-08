@@ -4,6 +4,9 @@ export const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
+export const stripePublishKey = "pk_test_kZf1K8f4oskDMMUsRMkugjIn";
+export const stripeSecretKey = "sk_test_HQ36PBrFShzxsIwa7xKXCMaS00RsiM609p";
+
 export const ToastSuccess = (heading, Message) => {
   Toast.show({
     type: "success",
