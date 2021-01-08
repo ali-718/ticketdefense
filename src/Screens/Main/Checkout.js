@@ -18,9 +18,15 @@ import Header from "../../components/Header";
 import { Pink } from "../../config/Theme";
 import { TextInputMask } from "react-native-masked-text";
 import { connect } from "react-redux";
-import { mapStateToProps } from "../../config/config";
+import { mapStateToProps, ToastError, ToastSuccess } from "../../config/config";
 import * as f from "firebase";
-import { createToken } from "../../redux/actions/HomeActions";
+import {
+  createToken,
+  createPayment,
+  clearAll,
+} from "../../redux/actions/HomeActions";
+import validator from "validator";
+import { StackActions } from "@react-navigation/native";
 
 class Checkout extends Component {
   state = {
@@ -42,6 +48,7 @@ class Checkout extends Component {
     creditCards: [],
     existingCardModal: false,
     selectedCard: {},
+    paymentLoading: false,
   };
 
   componentDidMount() {
@@ -50,8 +57,158 @@ class Checkout extends Component {
 
   processPayment = () => {
     if (this.state.selectedCard?.id) {
-      this.props.createToken(this.state.selectedCard);
+      this.setState({ paymentLoading: true });
+      this.props
+        .createToken({
+          ...this.state.selectedCard,
+          state: this.props.auth.ticket?.state,
+        })
+        .then((res) => {
+          this.props
+            .createPayment(res.id, this.props.auth?.ticket?.lawyer?.price)
+            .then((res) => {
+              f.default
+                .database()
+                .ref("list")
+                .child(this.props.auth.user.id)
+                .push({
+                  ...res,
+                  user: this.props.auth.user,
+                  lawyer: this.props.auth?.ticket?.lawyer,
+                  violation: {
+                    type: this.props.auth?.ticket?.violationType,
+                    state: this.props.auth?.ticket?.state,
+                    points: this.props.auth?.ticket?.points,
+                  },
+                })
+                .then(() => {
+                  this.setState({
+                    paymentLoading: false,
+                    existingCardModal: false,
+                  });
+                  ToastSuccess("Success", "Payment is successfull");
+                  this.props.clearAll();
+                  this.props.navigation.popToTop();
+                });
+            })
+            .catch((e) => {
+              ToastError("Error!", e);
+            });
+        })
+        .catch((e) => {
+          ToastError("Error!", e);
+        });
+
+      return;
     }
+
+    this.setState({ paymentLoading: true });
+
+    if (
+      validator.isEmpty(`${this.state.crediCardNumber}`) ||
+      !validator.isLength(this.state.crediCardNumber, 19) ||
+      validator.isEmpty(this.state.name) ||
+      validator.isEmpty(`${this.state.cvv}`) ||
+      !validator.isLength(this.state.cvv, 3) ||
+      validator.isEmpty(this.state.date) ||
+      !validator.isLength(this.state.date, 5)
+    ) {
+      if (!validator.isLength(this.state.crediCardNumber, 19)) {
+        this.setState({
+          crediCardNumberErrorMessage: "Invalid credit card format",
+          crediCardNumberError: true,
+        });
+      }
+
+      if (validator.isEmpty(this.state.crediCardNumber)) {
+        this.setState({
+          crediCardNumberErrorMessage: "Enter credit card number",
+          crediCardNumberError: true,
+        });
+      }
+
+      if (validator.isEmpty(this.state.name)) {
+        this.setState({
+          nameErrorMessage: "Enter your name",
+          nameError: true,
+        });
+      }
+
+      if (!validator.isLength(this.state.cvv, 3)) {
+        this.setState({
+          cvvErrorMessage: "Invalid CVV format",
+          cvvError: true,
+        });
+      }
+
+      if (validator.isEmpty(this.state.cvv)) {
+        this.setState({
+          cvvErrorMessage: "Enter CVV",
+          cvvError: true,
+        });
+      }
+
+      if (!validator.isLength(this.state.date, 5)) {
+        this.setState({
+          dateErrorMessage: "Invalid date format",
+          dateError: true,
+        });
+      }
+
+      if (validator.isEmpty(this.state.date)) {
+        this.setState({
+          dateErrorMessage: "Enter date",
+          dateError: true,
+        });
+      }
+
+      return;
+    }
+
+    this.props
+      .createToken({
+        crediCardNumber: this.state.crediCardNumber,
+        cvv: this.state.cvv,
+        date: this.state.date,
+        name: this.state.name,
+        state: this.props.auth.ticket?.state,
+      })
+      .then((res) => {
+        this.props
+          .createPayment(res.id, this.props.auth?.ticket?.lawyer?.price)
+          .then((res) => {
+            f.default
+              .database()
+              .ref("list")
+              .child(this.props.auth.user.id)
+              .push({
+                ...res,
+                user: this.props.auth.user,
+                lawyer: this.props.auth?.ticket?.lawyer,
+                violation: {
+                  type: this.props.auth?.ticket?.violationType,
+                  state: this.props.auth?.ticket?.state,
+                  points: this.props.auth?.ticket?.points,
+                },
+              })
+              .then(() => {
+                this.setState({
+                  paymentLoading: false,
+                  existingCardModal: false,
+                });
+                ToastSuccess("Success", "Payment is successfull");
+                this.props.clearAll();
+                this.props.navigation.popToTop();
+                // this.props.navigation.replace("Home");
+              });
+          })
+          .catch((e) => {
+            ToastError("Error!", e);
+          });
+      })
+      .catch((e) => {
+        ToastError("Error!", e);
+      });
   };
 
   fetchCreditCards = () => {
@@ -272,27 +429,38 @@ class Checkout extends Component {
               }}
             >
               {this.state.selectedCard?.id ? (
-                <TouchableOpacity
-                  onPress={() => this.processPayment()}
-                  style={{
-                    width: "100%",
-                    padding: 15,
-                    borderRadius: 10,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: Pink,
-                    marginBottom: 15,
-                  }}
-                >
-                  <Text style={{ color: "white", fontWeight: "bold" }}>
-                    Pay now
-                  </Text>
-                </TouchableOpacity>
+                this.state.paymentLoading ? (
+                  <ActivityIndicator
+                    style={{ marginBottom: 15 }}
+                    size="large"
+                    color={Pink}
+                  />
+                ) : (
+                  <>
+                    <TouchableOpacity
+                      onPress={() => this.processPayment()}
+                      style={{
+                        width: "100%",
+                        padding: 15,
+                        borderRadius: 10,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: Pink,
+                        marginBottom: 15,
+                      }}
+                    >
+                      <Text style={{ color: "white", fontWeight: "bold" }}>
+                        Pay now
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                )
               ) : null}
               <TouchableOpacity
                 onPress={() =>
                   this.setState({ existingCardModal: false, selectedCard: {} })
                 }
+                disabled={this.state.paymentLoading}
                 style={{ alignSelf: "center" }}
               >
                 <Text
@@ -575,6 +743,7 @@ class Checkout extends Component {
                     ) : (
                       <>
                         <TouchableOpacity
+                          onPress={() => this.processPayment()}
                           style={{
                             width: "100%",
                             padding: 15,
@@ -592,6 +761,7 @@ class Checkout extends Component {
                         <TouchableOpacity
                           onPress={() => this.setState({ paymentModal: false })}
                           style={{ marginTop: 20, alignSelf: "center" }}
+                          disabled={this.state.paymentLoading}
                         >
                           <Text
                             style={{
@@ -797,4 +967,8 @@ class Checkout extends Component {
   }
 }
 
-export default connect(mapStateToProps, { createToken })(Checkout);
+export default connect(mapStateToProps, {
+  createToken,
+  createPayment,
+  clearAll,
+})(Checkout);

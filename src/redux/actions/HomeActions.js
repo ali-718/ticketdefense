@@ -1,6 +1,10 @@
 import * as f from "firebase";
 import NetInfo from "@react-native-community/netinfo";
-import { stripePublishKey, ToastError } from "../../config/config";
+import {
+  stripePublishKey,
+  stripeSecretKey,
+  ToastError,
+} from "../../config/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
@@ -66,7 +70,7 @@ export const createToken = (data) => (dispatch) =>
             )}&card[name]=${name}&card[address_state]=${state}`
           )
           .then((res) => {
-            console.log(res.data);
+            resolve(res.data);
           })
           .catch((e) => {
             if (e.message.includes("402")) {
@@ -80,3 +84,29 @@ export const createToken = (data) => (dispatch) =>
       }
     });
   });
+
+export const createPayment = (token, amount) => (dispatch) =>
+  new Promise((resolve, reject) => {
+    NetInfo.fetch().then((net) => {
+      if (net.isConnected) {
+        axios
+          .post(
+            `https://api.stripe.com/v1/charges?source=${token}&key=${stripeSecretKey}&amount=${
+              amount * 100
+            }&currency=usd`
+          )
+          .then((res) => {
+            resolve(res.data);
+          })
+          .catch(() => {
+            reject("some error occoured, please try again later");
+          });
+      } else {
+        reject("Network Error", "Kindly check your internet connection!");
+      }
+    });
+  });
+
+export const clearAll = () => (dispatch) => {
+  dispatch({ type: "CLEAR_TICKET" });
+};

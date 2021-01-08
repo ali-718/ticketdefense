@@ -7,6 +7,11 @@ const initialState = {
 export default function (state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
+    case "CLEAR_TICKET":
+      return {
+        ...state,
+        ticket: {},
+      };
     case "SET_LAWYER":
       return {
         ...state,

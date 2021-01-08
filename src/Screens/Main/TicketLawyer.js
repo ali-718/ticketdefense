@@ -49,10 +49,8 @@ class TicketLawyer extends Component {
   search = (text) => {
     const keyword = text?.toLowerCase();
     const realData = this.state.allLawyers;
-    const finalData = realData.filter(
-      (item) => item.name?.toLowerCase()?.includes(keyword)
-      // &&
-      // item.state?.toLowerCase() == this.props.auth.ticket?.state.toLowerCase()
+    const finalData = realData.filter((item) =>
+      item.name?.toLowerCase()?.includes(keyword)
     );
 
     this.setState({ lawyers: finalData });
@@ -125,13 +123,13 @@ class TicketLawyer extends Component {
                 {this.state.lawyers.filter(
                   (item) =>
                     item.state?.toLowerCase() ==
-                    this.props.auth.ticket?.state.toLowerCase()
+                    this.props.auth.ticket?.state?.toLowerCase()
                 ).length > 0 ? (
                   this.state.lawyers
                     .filter(
                       (item) =>
                         item.state?.toLowerCase() ==
-                        this.props.auth.ticket?.state.toLowerCase()
+                        this.props.auth.ticket?.state?.toLowerCase()
                     )
                     .map((item, i) => (
                       <TouchableOpacity
