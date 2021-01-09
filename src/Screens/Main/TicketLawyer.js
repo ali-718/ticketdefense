@@ -56,7 +56,7 @@ class TicketLawyer extends Component {
     this.setState({ lawyers: finalData });
   };
 
-  constinue = (item) => {
+  continue = (item) => {
     this.props.setLawyer(item);
     this.props.navigation.navigate("Checkout");
   };
@@ -133,7 +133,7 @@ class TicketLawyer extends Component {
                     )
                     .map((item, i) => (
                       <TouchableOpacity
-                        onPress={() => this.constinue(item)}
+                        onPress={() => this.continue(item)}
                         key={i}
                         style={{
                           width: "100%",

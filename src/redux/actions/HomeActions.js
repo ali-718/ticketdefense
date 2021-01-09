@@ -29,8 +29,6 @@ export const getLawyers = () => (dispatch) =>
           .catch((e) => {
             reject();
           });
-
-        dispatch({ type: "GET_LAWYERS", payload: lawyers });
       } else {
         ToastError("Network Error", "Kindly check your internet connection!");
         reject();
@@ -53,6 +51,36 @@ export const setLicensePoints = (points) => (dispatch) => {
 export const setLawyer = (lawyer) => (dispatch) => {
   dispatch({ type: "SET_LAWYER", payload: lawyer });
 };
+
+export const getList = (id) => (dispatch) =>
+  new Promise((resolve, reject) => {
+    const list = [];
+    NetInfo.fetch().then((net) => {
+      if (net.isConnected) {
+        f.default
+          .database()
+          .ref("list")
+          .child(id)
+          .once("value")
+          .then((res) => {
+            res.forEach((item, i) => {
+              list.push({ ...item.val(), id: item.key });
+            });
+          })
+          .then(() => {
+            console.log(list);
+            resolve(list);
+          })
+          .catch(() => {
+            reject();
+            ToastError("Error", "Some error occoured, please try again later");
+          });
+      } else {
+        ToastError("Network Error", "Kindly check your internet connection!");
+        reject();
+      }
+    });
+  });
 
 export const createToken = (data) => (dispatch) =>
   new Promise((resolve, reject) => {

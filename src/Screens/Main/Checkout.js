@@ -27,6 +27,7 @@ import {
 } from "../../redux/actions/HomeActions";
 import validator from "validator";
 import { StackActions } from "@react-navigation/native";
+import moment from "moment";
 
 class Checkout extends Component {
   state = {
@@ -80,6 +81,8 @@ class Checkout extends Component {
                     state: this.props.auth?.ticket?.state,
                     points: this.props.auth?.ticket?.points,
                   },
+                  status: 1,
+                  date: `${moment().format()}`,
                 })
                 .then(() => {
                   this.setState({
@@ -92,11 +95,22 @@ class Checkout extends Component {
                 });
             })
             .catch((e) => {
-              ToastError("Error!", e);
+              ToastError(
+                "Error!",
+                "Some error occoured, please try again later"
+              );
+              this.setState({
+                paymentLoading: false,
+                existingCardModal: false,
+              });
             });
         })
         .catch((e) => {
-          ToastError("Error!", e);
+          ToastError("Error!", "Some error occoured, please try again later");
+          this.setState({
+            paymentLoading: false,
+            existingCardModal: false,
+          });
         });
 
       return;
@@ -190,6 +204,8 @@ class Checkout extends Component {
                   state: this.props.auth?.ticket?.state,
                   points: this.props.auth?.ticket?.points,
                 },
+                status: 1,
+                date: `${moment().format()}`,
               })
               .then(() => {
                 this.setState({
@@ -203,11 +219,19 @@ class Checkout extends Component {
               });
           })
           .catch((e) => {
-            ToastError("Error!", e);
+            this.setState({
+              paymentLoading: false,
+              existingCardModal: false,
+            });
+            ToastError("Error!", "Some error occoured, please try again later");
           });
       })
       .catch((e) => {
-        ToastError("Error!", e);
+        this.setState({
+          paymentLoading: false,
+          existingCardModal: false,
+        });
+        ToastError("Error!", "Some error occoured, please try again later");
       });
   };
 

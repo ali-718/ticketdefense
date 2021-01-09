@@ -320,24 +320,26 @@ class Login extends Component {
                       }}
                     >
                       <View
+                        // onPress={() => {
+                        //   this.setState({
+                        //     remeberMe: !this.state.remeberMe,
+                        //   });
+                        // }}
                         style={{
                           flexDirection: "row",
                           justifyContent: "center",
                           alignItems: "center",
                         }}
                       >
-                        <CheckBox
-                          style={{ flex: 1 }}
-                          onClick={() => {
-                            this.setState({
-                              remeberMe: !this.state.remeberMe,
-                            });
-                          }}
+                        {/* <CheckBox
+                          style={{ borderWidth: 1 }}
+                          checkedCheckBoxColor={Pink}
+                          onClick={() => null}
                           isChecked={this.state.remeberMe}
                         />
                         <Text style={{ color: Blue, marginLeft: 30 }}>
                           Remember me
-                        </Text>
+                        </Text> */}
                       </View>
 
                       <View
