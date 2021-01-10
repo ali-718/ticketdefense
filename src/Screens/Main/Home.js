@@ -58,11 +58,18 @@ class Home extends Component {
   tab1 = () => (
     <View style={{ width: "100%", flex: 1 }}>
       {this.state.list.length > 0 ? (
-        <ScrollView style={{ width: "100%" }}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ width: "100%" }}
+        >
           <View style={{ width: "100%", alignItems: "center", marginTop: 20 }}>
             {this.state.list.map((item, i) => (
               <TouchableOpacity
-                // onPress={() => this.continue(item)}
+                onPress={() =>
+                  this.props.navigation.navigate("TicketDetail", {
+                    ticket: item,
+                  })
+                }
                 key={i}
                 style={{
                   width: "100%",

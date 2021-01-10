@@ -349,9 +349,15 @@ class Login extends Component {
                           alignItems: "center",
                         }}
                       >
-                        <Text style={{ color: Blue, marginLeft: 30 }}>
-                          Forgot Password ?
-                        </Text>
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.props.navigation.navigate("forgot")
+                          }
+                        >
+                          <Text style={{ color: Blue, marginLeft: 30 }}>
+                            Forgot Password ?
+                          </Text>
+                        </TouchableOpacity>
                       </View>
                     </View>
                   </View>

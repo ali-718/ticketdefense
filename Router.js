@@ -23,6 +23,8 @@ import PaymentMethods from "./src/Screens/Main/Settings/PaymentMethods";
 import Contact from "./src/Screens/Main/Settings/Contact";
 import Checkout from "./src/Screens/Main/Checkout";
 import "./src/config/firebase";
+import ForgotPassword from "./src/Screens/Auth/ForgotPassword";
+import TicketDetail from "./src/Screens/Main/TicketDetail";
 
 const Stack = createStackNavigator();
 
@@ -36,6 +38,7 @@ const Auth = () => (
     <Stack.Screen name="splash" component={Splash} />
     <Stack.Screen name="onBoard" component={Onboard} />
     <Stack.Screen name="login" component={Login} />
+    <Stack.Screen name="forgot" component={ForgotPassword} />
   </Stack.Navigator>
 );
 
@@ -49,6 +52,7 @@ const Main = () => (
     <Stack.Screen name="CourtList" component={CourtList} />
     <Stack.Screen name="Lawyers" component={TicketLawyer} />
     <Stack.Screen name="Checkout" component={Checkout} />
+    <Stack.Screen name="TicketDetail" component={TicketDetail} />
     {/* settings screens */}
     <Stack.Screen name="Profile" component={Profile} />
     <Stack.Screen name="PaymentMethods" component={PaymentMethods} />
