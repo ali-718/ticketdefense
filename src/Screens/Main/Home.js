@@ -9,7 +9,7 @@ import {
   View,
   Image,
 } from "react-native";
-import { Pink } from "../../config/Theme";
+import { green, Pink } from "../../config/Theme";
 import { Container, Header, Tab, Tabs, TabHeading, Icon } from "native-base";
 import Settings from "./Settings/Settings";
 import { connect } from "react-redux";
@@ -146,10 +146,17 @@ class Home extends Component {
                     </View>
 
                     <View style={{ alignItems: "center", marginRight: 10 }}>
-                      <Text style={{ color: Pink, fontSize: 10 }}>Status</Text>
+                      <Text style={{ color: "black", fontSize: 10 }}>
+                        Status
+                      </Text>
                       <View
                         style={{
-                          backgroundColor: Pink,
+                          backgroundColor:
+                            item?.status == 0
+                              ? "tomato"
+                              : item?.status == 6
+                              ? green
+                              : Pink,
                           borderRadius: 5,
                           paddingHorizontal: 8,
                           alignItems: "center",
@@ -164,8 +171,21 @@ class Home extends Component {
                             fontSize: 12,
                           }}
                         >
-                          {/* ${item.price} */}
-                          Pending
+                          {item?.status == 1
+                            ? "Pending"
+                            : item?.status == 0
+                            ? "Cancelled"
+                            : item?.status == 2
+                            ? "Appearance Filed"
+                            : item?.status == 3
+                            ? "Hearing Scheduled"
+                            : item?.status == 4
+                            ? "Required"
+                            : item?.status == 5
+                            ? "Required"
+                            : item?.status == 6
+                            ? "Completed"
+                            : null}
                         </Text>
                       </View>
                     </View>
