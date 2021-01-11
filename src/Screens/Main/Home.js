@@ -25,7 +25,7 @@ class Home extends Component {
       this.fecthList();
     });
 
-    const NotificationPermission = await Notifications.requestPermissionsAsync({
+    await Notifications.requestPermissionsAsync({
       ios: {
         allowAlert: true,
         allowBadge: true,

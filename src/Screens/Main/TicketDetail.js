@@ -239,7 +239,7 @@ class TicketDetail extends Component {
                 </View>
                 {this.state.ticket?.status == 0 ? null : (
                   <TouchableOpacity
-                    // onPress={() => this.setState({ existingCardModal: true })}
+                    onPress={() => this.props.navigation.navigate("Message")}
                     style={{
                       width: "100%",
                       height: 50,
@@ -462,7 +462,7 @@ class TicketDetail extends Component {
                 </View>
               </View>
 
-              {this.state.ticket?.status == 0 ? null : (
+              {/* {this.state.ticket?.status == 0 ? null : (
                 <TouchableOpacity
                   onPress={() => this.setState({ cancelModal: true })}
                   style={{
@@ -481,7 +481,7 @@ class TicketDetail extends Component {
                     Cancel case
                   </Text>
                 </TouchableOpacity>
-              )}
+              )} */}
             </View>
           </View>
         </ScrollView>

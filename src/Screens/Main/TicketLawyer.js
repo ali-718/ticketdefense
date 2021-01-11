@@ -82,12 +82,19 @@ class TicketLawyer extends Component {
         >
           <View style={{ width: "90%", flex: 1, alignItems: "center" }}>
             {/* <View style={{ width: "100%" }}> */}
-            <Text style={{ fontSize: 20, color: "black", fontWeight: "bold" }}>
-              Popular Traffic Ticket Lawyer ?
+            <Text
+              style={{
+                fontSize: 20,
+                color: "black",
+                fontWeight: "bold",
+                marginBottom: 20,
+              }}
+            >
+              Popular Traffic Ticket Lawyer
             </Text>
             {/* </View> */}
 
-            <View style={{ width: "100%", marginTop: 20 }}>
+            {/* <View style={{ width: "100%", marginTop: 20 }}>
               <View
                 style={{
                   width: "100%",
@@ -112,13 +119,13 @@ class TicketLawyer extends Component {
                   placeholderTextColor="gray"
                 />
               </View>
-            </View>
+            </View> */}
 
             {/* states */}
             {this.state.lawyers.length > 0 ? (
               <ScrollView
                 showsVerticalScrollIndicator={false}
-                style={{ width: "100%", paddingBottom: 20 }}
+                style={{ width: "100%", paddingBottom: 40, paddingTop: 0 }}
               >
                 {this.state.lawyers.filter(
                   (item) =>
