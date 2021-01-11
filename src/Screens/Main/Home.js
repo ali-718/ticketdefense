@@ -16,11 +16,29 @@ import { connect } from "react-redux";
 import { mapStateToProps } from "../../config/config";
 import { getList } from "../../redux/actions/HomeActions";
 import moment from "moment";
+import * as Notifications from "expo-notifications";
+import * as f from "firebase";
 
 class Home extends Component {
-  componentDidMount() {
+  async componentDidMount() {
     this.props.navigation.addListener("focus", () => {
       this.fecthList();
+    });
+
+    const NotificationPermission = await Notifications.requestPermissionsAsync({
+      ios: {
+        allowAlert: true,
+        allowBadge: true,
+        allowSound: true,
+        allowAnnouncements: true,
+      },
+    }).then(async () => {
+      const token = await Notifications.getExpoPushTokenAsync();
+
+      f.default.database().ref("users").child(this.props.auth.user?.id).update({
+        token: token.data,
+      });
+      console.log(token.data);
     });
   }
 

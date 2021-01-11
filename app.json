@@ -22,7 +22,15 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.ali7184.ticketdefense"
+      "package": "com.ali7184.ticketdefense",
+      "useNextNotificationsApi": true
+    },
+    "notification": {
+      "icon": "./assets/noti.png",
+      "color": "#FFC0CB",
+      "iosDisplayInForeground": true,
+      "androidMode": "collapse",
+      "androidCollapsedTitle": "new interactions"
     },
     "web": {
       "favicon": "./assets/favicon.png"
