@@ -406,6 +406,8 @@ class Checkout extends Component {
                     alignItems: "center",
                     justifyContent: "center",
                     backgroundColor: Pink,
+                    marginTop: 20,
+                    borderRadius: 10,
                   }}
                 >
                   <Text style={{ color: "white" }}>retry</Text>

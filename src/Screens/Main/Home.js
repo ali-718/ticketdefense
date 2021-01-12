@@ -38,7 +38,6 @@ class Home extends Component {
       f.default.database().ref("users").child(this.props.auth.user?.id).update({
         token: token.data,
       });
-      console.log(token.data);
     });
   }
 
@@ -224,12 +223,15 @@ class Home extends Component {
         >
           <Text style={{ fontSize: 20 }}>Some error occoured</Text>
           <TouchableOpacity
+            onPress={() => this.fecthList()}
             style={{
               padding: 10,
               paddingHorizontal: 20,
               alignItems: "center",
               justifyContent: "center",
               backgroundColor: Pink,
+              marginTop: 20,
+              borderRadius: 10,
             }}
           >
             <Text style={{ color: "white" }}>retry</Text>

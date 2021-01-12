@@ -30,7 +30,7 @@ class TicketDetail extends Component {
 
   componentDidMount() {
     const ticket = this.props.route.params.ticket;
-    console.log(ticket);
+
     this.setState({ ticket });
   }
 
@@ -239,7 +239,11 @@ class TicketDetail extends Component {
                 </View>
                 {this.state.ticket?.status == 0 ? null : (
                   <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate("Message")}
+                    onPress={() =>
+                      this.props.navigation.navigate("Message", {
+                        data: this.state.ticket,
+                      })
+                    }
                     style={{
                       width: "100%",
                       height: 50,

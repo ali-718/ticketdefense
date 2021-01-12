@@ -269,12 +269,34 @@ class TicketLawyer extends Component {
               >
                 <Text style={{ fontSize: 20 }}>Some error occoured</Text>
                 <TouchableOpacity
+                  onPress={() => {
+                    this.props
+                      .getLawyers()
+                      .then((res) => {
+                        this.setState({
+                          allLawyers: res,
+                          lawyers: res,
+                          loading: false,
+                          error: false,
+                        });
+                      })
+                      .catch((e) => {
+                        this.setState({
+                          allLawyers: [],
+                          lawyers: [],
+                          loading: false,
+                          error: true,
+                        });
+                      });
+                  }}
                   style={{
                     padding: 10,
                     paddingHorizontal: 20,
                     alignItems: "center",
                     justifyContent: "center",
                     backgroundColor: Pink,
+                    marginTop: 20,
+                    borderRadius: 10,
                   }}
                 >
                   <Text style={{ color: "white" }}>retry</Text>
