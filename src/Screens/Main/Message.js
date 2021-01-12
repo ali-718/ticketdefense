@@ -60,14 +60,9 @@ class Message extends Component {
           .on(
             "value",
             (res) => {
-              console.log(Object.values(res.val()));
-              // res.forEach((data) => {
-              //   this.setState((prevState) => ({
-              //     chats: [...prevState.chats, { ...data.val(), id: data.key }],
-              //   }));
-              // });
-
-              this.setState({ chats: Object.values(res.val()) });
+              this.setState({
+                chats: res.val() ? Object.values(res.val()) : [],
+              });
 
               this.setState({ loading: false, error: false });
             },
@@ -238,18 +233,85 @@ class Message extends Component {
               </TouchableOpacity>
             </View>
           ) : (
-            <View
-              style={{
-                width: "100%",
-                flex: 1,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text style={{ fontSize: 18 }}>
-                Start your conversation with lawyer...!
-              </Text>
-            </View>
+            <>
+              <ScrollView
+                ref={(e) => (this.scroll = e)}
+                showsVerticalScrollIndicator={false}
+                style={{ width: "100%", flex: 1 }}
+              >
+                <View
+                  style={{
+                    width: "100%",
+                    flex: 1,
+                    backgroundColor: "white",
+                    paddingHorizontal: 10,
+                  }}
+                >
+                  {this.state.chats.map((item, i) => (
+                    <View
+                      key={i}
+                      style={{
+                        maxWidth: "60%",
+                        alignSelf:
+                          item.sender == this.state.currentUser
+                            ? "flex-end"
+                            : "flex-start",
+                        backgroundColor: Pink,
+                        padding: 10,
+                        borderRadius: 10,
+                        marginTop: 10,
+                      }}
+                    >
+                      <Text style={{ color: "white" }}>{item.message}</Text>
+                    </View>
+                  ))}
+                </View>
+              </ScrollView>
+              <View
+                style={{
+                  width: "100%",
+                  height: 60,
+                  flexDirection: "row",
+                  paddingHorizontal: 10,
+                  alignItems: "center",
+                }}
+              >
+                <TextInput
+                  value={this.state.message}
+                  onChangeText={(val) => this.setState({ message: val })}
+                  style={{
+                    flex: 1,
+                    height: 40,
+                    paddingLeft: 10,
+                    borderStyle: "solid",
+                    borderColor: "gray",
+                    borderWidth: 0.5,
+                    borderRadius: 10,
+                    paddingRight: 5,
+                  }}
+                  placeholder="Message...!"
+                />
+                <TouchableOpacity
+                  onPress={() => this.sendMessage()}
+                  disabled={this.state.message.length == 0 ? true : false}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: Pink,
+                    borderRadius: 100,
+                    marginLeft: 10,
+                  }}
+                >
+                  <Icon
+                    name="send"
+                    type="Ionicons"
+                    style={{ color: "white", fontSize: 20 }}
+                  />
+                </TouchableOpacity>
+              </View>
+            </>
           )}
         </View>
       </SafeAreaView>
