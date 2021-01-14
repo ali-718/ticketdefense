@@ -8,9 +8,10 @@ import * as Animatable from "react-native-animatable";
 import { Pink } from "../../config/Theme";
 import * as f from "firebase";
 import { getLawyers } from "../../redux/actions/HomeActions";
+import * as Notifications from "expo-notifications";
 
 class Splash extends Component {
-  componentDidMount() {
+  async componentDidMount() {
     setTimeout(() => {
       this.props
         .fetchUser()

@@ -68,7 +68,6 @@ export const getList = (id) => (dispatch) =>
             });
           })
           .then(() => {
-            console.log(list);
             resolve(list);
           })
           .catch(() => {

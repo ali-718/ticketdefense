@@ -27,12 +27,20 @@ export const Signup = (data) => (dispatch) =>
               })
               .catch((e) => {
                 reject();
-                ToastError("Error", e.message);
+                ToastError(
+                  "Error",
+                  typeof e.message == "string"
+                    ? e.message
+                    : "Some error occoured"
+                );
               });
           })
           .catch((e) => {
             reject();
-            ToastError("Error", e.message);
+            ToastError(
+              "Error",
+              typeof e.message == "string" ? e.message : "Some error occoured"
+            );
           });
       } else {
         ToastError("Network Error", "Kindly check your internet connection!");
@@ -65,12 +73,20 @@ export const SignIn = (data) => (dispatch) =>
               })
               .catch((e) => {
                 reject();
-                ToastError("Error", e.message);
+                ToastError(
+                  "Error",
+                  typeof e.message == "string"
+                    ? e.message
+                    : "Some error occoured"
+                );
               });
           })
           .catch((e) => {
             reject();
-            ToastError("Error", e.message);
+            ToastError(
+              "Error",
+              typeof e.message == "string" ? e.message : "Some error occoured"
+            );
           });
       } else {
         ToastError("Network Error", "Kindly check your internet connection!");
@@ -92,8 +108,6 @@ export const removeUser = () => (dispatch) => {
 export const fetchUser = () => (dispatch) =>
   new Promise(async (resolve, reject) => {
     const user = await AsyncStorage.getItem("user");
-
-    console.log(user);
 
     if (user != null) {
       dispatch({ type: "USER", payload: JSON.parse(user) });
@@ -121,8 +135,10 @@ export const getUserfromDatabse = (id, image = "") => (dispatch) =>
       })
       .catch((e) => {
         reject();
-        ToastError("Error", e.message);
-        console.log(e.message);
+        ToastError(
+          "Error",
+          typeof e.message == "string" ? e.message : "Some error occoured"
+        );
       });
   });
 
@@ -157,13 +173,20 @@ export const update = (data, image) => (dispatch) =>
               })
               .catch((e) => {
                 reject();
-                ToastError("Error", e.message);
-                console.log(e.message);
+                ToastError(
+                  "Error",
+                  typeof e.message == "string"
+                    ? e.message
+                    : "Some error occoured"
+                );
               });
             // resolve();
           })
           .catch((e) => {
-            ToastError("Error", e.message);
+            ToastError(
+              "Error",
+              typeof e.message == "string" ? e.message : "Some error occoured"
+            );
             reject();
           });
       } else {

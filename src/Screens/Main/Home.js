@@ -18,27 +18,31 @@ import { getList } from "../../redux/actions/HomeActions";
 import moment from "moment";
 import * as Notifications from "expo-notifications";
 import * as f from "firebase";
+import * as Permissions from "expo-permissions";
 
 class Home extends Component {
   async componentDidMount() {
     this.props.navigation.addListener("focus", () => {
       this.fecthList();
     });
+    Permissions.askAsync(Permissions.NOTIFICATIONS);
 
-    await Notifications.requestPermissionsAsync({
-      ios: {
-        allowAlert: true,
-        allowBadge: true,
-        allowSound: true,
-        allowAnnouncements: true,
-      },
-    }).then(async () => {
+    const { status } = await Notifications.getPermissionsAsync();
+
+    if (status == "granted") {
       const token = await Notifications.getExpoPushTokenAsync();
 
       f.default.database().ref("users").child(this.props.auth.user?.id).update({
         token: token.data,
       });
-    });
+
+      console.log(token);
+    } else {
+      Permissions.askAsync(Permissions.NOTIFICATIONS);
+      await Notifications.requestPermissionsAsync();
+      alert("unable to get push notification");
+    }
+    console.log(status);
   }
 
   fecthList = () => {
