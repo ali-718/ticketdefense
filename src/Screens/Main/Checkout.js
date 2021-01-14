@@ -93,6 +93,22 @@ class Checkout extends Component {
                   this.props.clearAll();
                   this.props.navigation.popToTop();
                 });
+
+              f.default
+                .database()
+                .ref("cases")
+                .push({
+                  ...res,
+                  user: this.props.auth.user,
+                  lawyer: this.props.auth?.ticket?.lawyer,
+                  violation: {
+                    type: this.props.auth?.ticket?.violationType,
+                    state: this.props.auth?.ticket?.state,
+                    points: this.props.auth?.ticket?.points,
+                  },
+                  status: 1,
+                  date: `${moment().format()}`,
+                });
             })
             .catch((e) => {
               ToastError(

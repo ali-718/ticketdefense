@@ -40,7 +40,6 @@ class Home extends Component {
             .catch((e) => {
               alert("unable to upload notification");
             });
-
           console.log(token);
         })
         .catch((e) => {
