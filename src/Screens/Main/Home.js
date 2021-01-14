@@ -25,22 +25,30 @@ class Home extends Component {
     this.props.navigation.addListener("focus", () => {
       this.fecthList();
     });
-    Permissions.askAsync(Permissions.NOTIFICATIONS);
-
-    const { status } = await Notifications.getPermissionsAsync();
+    const { status } = await Notifications.requestPermissionsAsync();
 
     if (status == "granted") {
-      const token = await Notifications.getExpoPushTokenAsync();
+      Notifications.getExpoPushTokenAsync()
+        .then((token) => {
+          f.default
+            .database()
+            .ref("users")
+            .child(this.props.auth.user?.id)
+            .update({
+              token: token.data,
+            })
+            .catch((e) => {
+              alert("unable to upload notification");
+            });
 
-      f.default.database().ref("users").child(this.props.auth.user?.id).update({
-        token: token.data,
-      });
-
-      console.log(token);
+          console.log(token);
+        })
+        .catch((e) => {
+          alert("unable to get push token");
+        });
     } else {
-      Permissions.askAsync(Permissions.NOTIFICATIONS);
-      await Notifications.requestPermissionsAsync();
       alert("unable to get push notification");
+      await Notifications.requestPermissionsAsync();
     }
     console.log(status);
   }

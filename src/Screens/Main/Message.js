@@ -89,6 +89,7 @@ class Message extends Component {
             reciever: this.state.reciever,
             message: this.state.message,
             date: moment().format(),
+            senderData: this.props.auth?.user,
           })
           .then(() => {
             this.setState({ message: "" });
