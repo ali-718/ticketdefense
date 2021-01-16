@@ -68,7 +68,7 @@ class Checkout extends Component {
           this.props
             .createPayment(res.id, this.props.auth?.ticket?.lawyer?.price)
             .then((res) => {
-              f.default
+              const upload = f.default
                 .database()
                 .ref("list")
                 .child(this.props.auth.user.id)
@@ -83,32 +83,39 @@ class Checkout extends Component {
                   },
                   status: 1,
                   date: `${moment().format()}`,
-                })
-                .then(() => {
-                  this.setState({
-                    paymentLoading: false,
-                    existingCardModal: false,
-                  });
-                  ToastSuccess("Success", "Payment is successfull");
-                  this.props.clearAll();
-                  this.props.navigation.popToTop();
                 });
 
-              f.default
-                .database()
-                .ref("cases")
-                .push({
-                  ...res,
-                  user: this.props.auth.user,
-                  lawyer: this.props.auth?.ticket?.lawyer,
-                  violation: {
-                    type: this.props.auth?.ticket?.violationType,
-                    state: this.props.auth?.ticket?.state,
-                    points: this.props.auth?.ticket?.points,
-                  },
-                  status: 1,
-                  date: `${moment().format()}`,
+              upload.once("value").then((key) => {
+                this.setState({
+                  paymentLoading: false,
+                  existingCardModal: false,
                 });
+
+                console.log("ok getting value");
+                console.log(key.key);
+
+                f.default
+                  .database()
+                  .ref("cases")
+                  .child(key.key)
+                  .set({
+                    ...res,
+                    user: this.props.auth.user,
+                    lawyer: this.props.auth?.ticket?.lawyer,
+                    violation: {
+                      type: this.props.auth?.ticket?.violationType,
+                      state: this.props.auth?.ticket?.state,
+                      points: this.props.auth?.ticket?.points,
+                    },
+                    status: 1,
+                    date: `${moment().format()}`,
+                  })
+                  .then(() => {
+                    ToastSuccess("Success", "Payment is successfull");
+                    this.props.clearAll();
+                    this.props.navigation.popToTop();
+                  });
+              });
             })
             .catch((e) => {
               ToastError(

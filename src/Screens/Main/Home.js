@@ -28,7 +28,7 @@ class Home extends Component {
     const { status } = await Notifications.requestPermissionsAsync();
 
     if (status == "granted") {
-      Notifications.getExpoPushTokenAsync()
+      Notifications.getExpoPushTokenAsync({ experienceId: undefined })
         .then((token) => {
           f.default
             .database()
@@ -43,7 +43,8 @@ class Home extends Component {
           console.log(token);
         })
         .catch((e) => {
-          alert("unable to get push token");
+          alert(JSON.stringify(e));
+          // console.log(e);
         });
     } else {
       alert("unable to get push notification");
@@ -196,7 +197,7 @@ class Home extends Component {
                         <Text
                           style={{
                             color: "white",
-                            fontSize: 12,
+                            fontSize: 10,
                           }}
                         >
                           {item?.status == 1
