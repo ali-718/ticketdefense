@@ -377,8 +377,7 @@ class Home extends Component {
           tabBarPosition="bottom"
           tabBarUnderlineStyle={{
             borderBottomWidth: 0,
-            borderBottomColor: "red",
-            backgroundColor: Pink,
+            backgroundColor: "white",
           }}
         >
           <Tab
@@ -386,76 +385,73 @@ class Home extends Component {
             activeTextStyle={{ color: "white" }}
             activeTabStyle={{
               borderBottomWidth: 0,
-              backgroundColor: Pink,
-              borderBottomColor: "red",
+              backgroundColor: "white",
             }}
             heading={
               <TabHeading
                 style={{
-                  backgroundColor: Pink,
-                  borderBottomColor: Pink,
+                  backgroundColor: "white",
+                  borderBottomColor: "white",
                   flexDirection: "column",
                   marginTop: -10,
                 }}
                 activeTextStyle={{ color: "white" }}
                 activeTabStyle={{ borderBottomWidth: 0, borderColor: Pink }}
-                textStyle={{ color: "white" }}
+                textStyle={{ color: Pink }}
               >
                 <Icon
-                  style={{ color: "white" }}
+                  style={{ color: Pink }}
                   name="clipboard-text-outline"
                   type="MaterialCommunityIcons"
                 />
-                <Text style={{ color: "white", marginTop: 2 }}>Cases</Text>
+                <Text style={{ color: Pink, marginTop: 2 }}>Tickets</Text>
               </TabHeading>
             }
           >
             {this.tab1()}
           </Tab>
           <Tab
-            tabStyle={{ backgroundColor: Pink }}
+            tabStyle={{ backgroundColor: "white" }}
             activeTextStyle={{ color: "white" }}
             activeTabStyle={{
               borderBottomWidth: 0,
-              backgroundColor: Pink,
-              bordersBottomColor: "red",
+              backgroundColor: "white",
             }}
             heading={
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate("States")}
                 style={{
-                  backgroundColor: Pink,
-                  borderBottomColor: Pink,
+                  backgroundColor: "white",
+                  borderBottomColor: "white",
                   flexDirection: "column",
-                  marginTop: -10,
                 }}
-                activeTextStyle={{ color: "white" }}
+                activeTextStyle={{ color: Pink }}
                 activeTabStyle={{ borderBottomWidth: 0, borderColor: Pink }}
-                textStyle={{ color: "white" }}
+                textStyle={{ color: Pink }}
               >
                 <TouchableOpacity
                   onPress={() => this.props.navigation.navigate("States")}
                   style={{
-                    marginTop: -40,
                     padding: 10,
                     zIndex: 99,
+                    marginTop: -20,
                   }}
                 >
                   <View
                     style={{
-                      width: 60,
-                      height: 60,
-                      backgroundColor: Pink,
+                      width: 50,
+                      height: 50,
+                      backgroundColor: "white",
                       borderStyle: "solid",
                       borderWidth: 5,
-                      borderColor: "white",
+                      borderColor: Pink,
                       alignItems: "center",
                       justifyContent: "center",
                       borderRadius: 100,
                     }}
                   >
                     <Icon
-                      style={{ color: "white", fontSize: 20 }}
+                      style={{ color: Pink, fontSize: 20 }}
                       name="plus"
                       type="AntDesign"
                     />
@@ -467,18 +463,17 @@ class Home extends Component {
             {this.tab1()}
           </Tab>
           <Tab
-            tabStyle={{ backgroundColor: Pink }}
+            tabStyle={{ backgroundColor: "white" }}
             activeTextStyle={{ color: "white" }}
             activeTabStyle={{
               borderBottomWidth: 0,
-              backgroundColor: Pink,
-              borderBottomColor: "red",
+              backgroundColor: "white",
             }}
             heading={
               <TabHeading
                 style={{
-                  backgroundColor: Pink,
-                  borderBottomColor: Pink,
+                  backgroundColor: "white",
+                  borderBottomColor: "white",
                   flexDirection: "column",
                   marginTop: -10,
                 }}
@@ -487,11 +482,11 @@ class Home extends Component {
                 textStyle={{ color: "white" }}
               >
                 <Icon
-                  style={{ color: "white" }}
+                  style={{ color: Pink }}
                   name="ios-settings-sharp"
                   type="Ionicons"
                 />
-                <Text style={{ color: "white", marginTop: 2 }}>Settings</Text>
+                <Text style={{ color: Pink, marginTop: 2 }}>Account</Text>
               </TabHeading>
             }
           >

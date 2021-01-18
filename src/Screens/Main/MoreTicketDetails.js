@@ -91,7 +91,7 @@ class MoreTicketDetails extends Component {
                     color: "gray",
                   }}
                 >
-                  When type of violation(s) did you recieve?
+                  Tell us a stroy
                 </Text>
               </View>
               <View style={{ width: "100%", marginTop: 10 }}>
@@ -106,7 +106,7 @@ class MoreTicketDetails extends Component {
                     borderStyle: "solid",
                     borderColor: "gray",
                   }}
-                  placeholder="Enter here!"
+                  placeholder="Write here!"
                   onChangeText={(val) =>
                     this.setState({ typeOfViolation: val })
                   }

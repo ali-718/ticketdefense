@@ -106,6 +106,7 @@ class Checkout extends Component {
                       type: this.props.auth?.ticket?.violationType,
                       state: this.props.auth?.ticket?.state,
                       points: this.props.auth?.ticket?.points,
+                      image: this.props.auth?.ticket?.image,
                     },
                     status: 1,
                     date: `${moment().format()}`,
@@ -518,7 +519,7 @@ class Checkout extends Component {
                     textDecorationLine: "underline",
                   }}
                 >
-                  cancel
+                  go back
                 </Text>
               </TouchableOpacity>
             </View>
@@ -818,7 +819,7 @@ class Checkout extends Component {
                               textDecorationLine: "underline",
                             }}
                           >
-                            cancel
+                            go back
                           </Text>
                         </TouchableOpacity>
                       </>
@@ -890,32 +891,6 @@ class Checkout extends Component {
               </Text>
             </View>
 
-            <View
-              style={{
-                width: "100%",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: 10,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: "gray",
-                }}
-              >
-                Service fee
-              </Text>
-
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: "gray",
-                }}
-              >
-                $0
-              </Text>
-            </View>
             <View
               style={{
                 marginTop: 10,

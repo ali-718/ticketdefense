@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {
+  ActivityIndicator,
   Alert,
   Image,
   Modal,
@@ -13,10 +14,17 @@ import Header from "../../components/Header";
 import { Pink } from "../../config/Theme";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
+import uuid from "uuid";
+import * as f from "firebase";
+import { mapStateToProps, ToastError } from "../../config/config";
+import { setImage } from "../../redux/actions/HomeActions";
+import { connect } from "react-redux";
 
-export default class TicketImage extends Component {
+class TicketImage extends Component {
   state = {
     imageModal: false,
+    TicketImage: "",
+    imageLoading: false,
   };
 
   async componentDidMount() {
@@ -35,30 +43,47 @@ export default class TicketImage extends Component {
       aspect: [4, 5],
       allowsMultipleSelection: false,
     })
-      .then((res) => {
+      .then(async (res) => {
         this.setState({ imageLoading: true });
 
         if (!res.cancelled) {
-          const data = new FormData();
-          data.append("photo", {
-            name: "photo.png",
-            filename: "imageName.png",
-            type: "image/png",
-            uri:
-              Platform.OS === "android"
-                ? res.uri
-                : res.uri.replace("file://", ""),
+          const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+              resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+              console.log(e);
+              reject(new TypeError("Network request failed"));
+            };
+            xhr.responseType = "blob";
+            xhr.open("GET", res.uri, true);
+            xhr.send(null);
           });
-          data.append("Content-Type", "image/png");
 
-          // this.props
-          //   .UploadProfileImg(this.props.auth?.user?.UserId, data)
-          //   .then(() => {
-          //     this.setState({ imageLoading: false });
-          //   })
-          //   .catch(() => {
-          //     this.setState({ imageLoading: false });
-          //   });
+          f.default
+            .storage()
+            .ref("Tickets")
+            .child(this.uniqueId())
+            .put(blob)
+            .then(async (res) => {
+              this.props.setImage(await res.ref.getDownloadURL());
+              this.setState({
+                imageLoading: false,
+                TicketImage: await res.ref.getDownloadURL(),
+              });
+              blob.close();
+            })
+            .catch((e) => {
+              ToastError(
+                "Error!",
+                "Some error occoured, please try again later"
+              );
+              this.setState({ imageLoading: false });
+              console.log(e);
+            });
+        } else {
+          this.setState({ imageLoading: false, TicketImage: "" });
         }
       })
       .catch(() => {
@@ -67,6 +92,37 @@ export default class TicketImage extends Component {
           "Unable to access your galley, provide permission from app settings"
         );
       });
+  };
+
+  s4 = () => {
+    return Math.floor((1 + Math.random()) * 0x1000)
+      .toString(16)
+      .substring(1);
+  };
+
+  uniqueId = () => {
+    return (
+      this.s4() +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4()
+    );
   };
 
   openCamera = () => {
@@ -78,35 +134,51 @@ export default class TicketImage extends Component {
       aspect: [4, 5],
       allowsMultipleSelection: false,
     })
-      .then((res) => {
+      .then(async (res) => {
         this.setState({ imageLoading: true });
 
         if (!res.cancelled) {
-          const data = new FormData();
-          data.append("photo", {
-            name: "photo.png",
-            filename: "imageName.png",
-            type: "image/png",
-            uri:
-              Platform.OS === "android"
-                ? res.uri
-                : res.uri.replace("file://", ""),
+          const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+              resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+              console.log(e);
+              reject(new TypeError("Network request failed"));
+            };
+            xhr.responseType = "blob";
+            xhr.open("GET", res.uri, true);
+            xhr.send(null);
           });
-          data.append("Content-Type", "image/png");
 
-          // this.props
-          //   .UploadProfileImg(this.props.auth?.user?.UserId, data)
-          //   .then(() => {
-          //     this.setState({ imageLoading: false });
-          //   })
-          //   .catch(() => {
-          //     this.setState({ imageLoading: false });
-          //   });
+          f.default
+            .storage()
+            .ref("Tickets")
+            .child(this.uniqueId())
+            .put(blob)
+            .then(async (res) => {
+              this.props.setImage(await res.ref.getDownloadURL());
+              this.setState({
+                imageLoading: false,
+                TicketImage: await res.ref.getDownloadURL(),
+              });
+              blob.close();
+            })
+            .catch((e) => {
+              ToastError(
+                "Error!",
+                "Some error occoured, please try again later"
+              );
+              this.setState({ imageLoading: false });
+              console.log(e);
+            });
         } else {
-          this.setState({ imageLoading: false });
+          this.setState({ imageLoading: false, TicketImage: "" });
         }
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log(e);
         Alert.alert(
           "Error",
           "Unable to access your camera, provide permission from app settings"
@@ -242,10 +314,18 @@ export default class TicketImage extends Component {
           </View>
 
           <View style={{ width: "100%", alignItems: "center" }}>
-            <Image
-              style={{ width: 150, height: 150 }}
-              source={require("../../../assets/ticket.png")}
-            />
+            {this.state.imageLoading ? (
+              <ActivityIndicator size="large" color={Pink} />
+            ) : (
+              <Image
+                style={{ width: 150, height: 150 }}
+                source={
+                  this.props.auth.ticket?.image?.length > 0
+                    ? { uri: this.props.auth.ticket?.image }
+                    : require("../../../assets/ticket.png")
+                }
+              />
+            )}
           </View>
 
           <View
@@ -262,6 +342,7 @@ export default class TicketImage extends Component {
                 borderRadius: 10,
                 marginTop: 20,
               }}
+              disabled={this.state.imageLoading}
             >
               <Text
                 style={{ color: "white", fontSize: 17, fontWeight: "bold" }}
@@ -270,27 +351,34 @@ export default class TicketImage extends Component {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() =>
-                this.props.navigation.navigate("NumberOfViolations")
-              }
-              style={{ marginTop: 15 }}
-            >
-              <Text
+            {this.props.auth.ticket?.image?.length > 0 ? (
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate("MoreTicketDetails")
+                }
                 style={{
-                  fontSize: 15,
-                  fontWeight: "bold",
-                  color: Pink,
-                  textAlign: "center",
                   width: "100%",
+                  height: 50,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderColor: Pink,
+                  borderRadius: 10,
+                  marginTop: 20,
+                  borderWidth: 2,
+                  borderStyle: "solid",
                 }}
+                disabled={this.state.imageLoading}
               >
-                I'll provide one later
-              </Text>
-            </TouchableOpacity>
+                <Text style={{ color: Pink, fontSize: 17, fontWeight: "bold" }}>
+                  Next
+                </Text>
+              </TouchableOpacity>
+            ) : null}
           </View>
         </View>
       </SafeAreaView>
     );
   }
 }
+
+export default connect(mapStateToProps, { setImage })(TicketImage);

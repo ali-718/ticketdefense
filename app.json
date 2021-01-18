@@ -31,6 +31,13 @@
       },
       "useNextNotificationsApi": true
     },
+    "notification": {
+      "icon": "./assets/noti.png",
+      "color": "#FFC0CB",
+      "iosDisplayInForeground": true,
+      "androidMode": "collapse",
+      "androidCollapsedTitle": "new interactions"
+    },
     "web": {
       "favicon": "./assets/favicon.png"
     },

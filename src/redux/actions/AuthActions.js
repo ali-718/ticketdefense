@@ -149,7 +149,7 @@ export const updateImage = (uri, data) => (dispatch) =>
     resolve();
   });
 
-export const update = (data, image) => (dispatch) =>
+export const update = (data) => (dispatch) =>
   new Promise((resolve, reject) => {
     NetInfo.fetch().then((state) => {
       if (state.isConnected) {
@@ -166,9 +166,9 @@ export const update = (data, image) => (dispatch) =>
               .then((user) => {
                 dispatch({
                   type: "USER",
-                  payload: { ...user.val(), id: user.key, image },
+                  payload: { ...user.val(), id: user.key },
                 });
-                saveUser({ ...user.val(), id: user.key, image });
+                saveUser({ ...user.val(), id: user.key });
                 resolve();
               })
               .catch((e) => {

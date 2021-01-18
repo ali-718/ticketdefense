@@ -40,6 +40,10 @@ export const setUSState = (state) => (dispatch) => {
   dispatch({ type: "SET_STATE", payload: state });
 };
 
+export const setImage = (state) => (dispatch) => {
+  dispatch({ type: "SET_IMAGE", payload: state });
+};
+
 export const setViolationType = (violation) => (dispatch) => {
   dispatch({ type: "SET_VIOLATION_TYPE", payload: violation });
 };

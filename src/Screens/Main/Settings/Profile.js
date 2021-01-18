@@ -61,6 +61,7 @@ class Profile extends Component {
     dob: "",
     gender: "",
     isLoading: false,
+    ProfileImage: "",
   };
 
   async componentDidMount() {
@@ -76,7 +77,8 @@ class Profile extends Component {
       Email: user.Email,
       Mobile: user.Phone,
       Address: user.address,
-      image: user.image?.length > 0 ? user.image : this.state.image,
+      ProfileImage:
+        user.image?.length > 0 ? user.image : this.state.ProfileImage,
       dob: user.dob,
     });
   }
@@ -94,24 +96,44 @@ class Profile extends Component {
         this.setState({ imageLoading: true });
 
         if (!res.cancelled) {
-          const data = new FormData();
-          data.append("photo", {
-            name: "photo.png",
-            filename: "imageName.png",
-            type: "image/png",
-            uri:
-              Platform.OS === "android"
-                ? res.uri
-                : res.uri.replace("file://", ""),
+          const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+              resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+              console.log(e);
+              reject(new TypeError("Network request failed"));
+            };
+            xhr.responseType = "blob";
+            xhr.open("GET", res.uri, true);
+            xhr.send(null);
           });
-          data.append("Content-Type", "image/png");
 
-          this.setState({ imageLoading: false });
-          this.props.updateImage(res.uri, this.props.auth.user).then(() => {
-            this.setState({ imageLoading: false, image: res.uri });
-          });
+          f.default
+            .storage()
+            .ref("profile")
+            .child("users")
+            .child(this.uniqueId())
+            .put(blob)
+            .then(async (res) => {
+              this.setState({
+                imageLoading: false,
+                ProfileImage: await res.ref.getDownloadURL(),
+                TextEdit: true,
+              });
+              blob.close();
+            })
+            .catch((e) => {
+              ToastError(
+                "Error!",
+                "Some error occoured, please try again later"
+              );
+              this.setState({ imageLoading: false, TextEdit: false });
+              console.log(e);
+            });
         } else {
-          this.setState({ imageLoading: false });
+          this.setState({ imageLoading: false, ProfileImage: "" });
         }
       })
       .catch(() => {
@@ -169,7 +191,7 @@ class Profile extends Component {
 
   updateProfile = () => {
     this.setState({ TextEdit: false });
-    const { Name, Email, Mobile, Address, dob, image } = this.state;
+    const { Name, Email, Mobile, Address, dob, ProfileImage } = this.state;
 
     if (
       validator.isEmpty(Name) ||
@@ -191,17 +213,15 @@ class Profile extends Component {
     this.setState({ isLoading: true });
 
     this.props
-      .update(
-        {
-          Name,
-          Email,
-          Phone: Mobile,
-          address: Address,
-          dob,
-          id: this.props.auth.user.id,
-        },
-        image
-      )
+      .update({
+        Name,
+        Email,
+        Phone: Mobile,
+        address: Address,
+        dob,
+        id: this.props.auth.user.id,
+        image: ProfileImage,
+      })
       .then(() => {
         this.setState({ isLoading: false });
         ToastSuccess("Success", "Profile updated succesfully");
@@ -209,6 +229,37 @@ class Profile extends Component {
       .catch(() => {
         this.setState({ isLoading: false });
       });
+  };
+
+  s4 = () => {
+    return Math.floor((1 + Math.random()) * 0x1000)
+      .toString(16)
+      .substring(1);
+  };
+
+  uniqueId = () => {
+    return (
+      this.s4() +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4()
+    );
   };
 
   openGallery = () => {
@@ -220,24 +271,48 @@ class Profile extends Component {
       aspect: [4, 5],
       allowsMultipleSelection: false,
     })
-      .then((res) => {
+      .then(async (res) => {
         this.setState({ imageLoading: true });
 
         if (!res.cancelled) {
-          const data = new FormData();
-          data.append("photo", {
-            name: "photo.png",
-            filename: "imageName.png",
-            type: "image/png",
-            uri:
-              Platform.OS === "android"
-                ? res.uri
-                : res.uri.replace("file://", ""),
+          const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+              resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+              console.log(e);
+              reject(new TypeError("Network request failed"));
+            };
+            xhr.responseType = "blob";
+            xhr.open("GET", res.uri, true);
+            xhr.send(null);
           });
-          data.append("Content-Type", "image/png");
-          this.props.updateImage(res.uri, this.props.auth.user).then(() => {
-            this.setState({ imageLoading: false, image: res.uri });
-          });
+
+          f.default
+            .storage()
+            .ref("profile")
+            .child("users")
+            .child(this.uniqueId())
+            .put(blob)
+            .then(async (res) => {
+              this.setState({
+                imageLoading: false,
+                ProfileImage: await res.ref.getDownloadURL(),
+                TextEdit: true,
+              });
+              blob.close();
+            })
+            .catch((e) => {
+              ToastError(
+                "Error!",
+                "Some error occoured, please try again later"
+              );
+              this.setState({ imageLoading: false, TextEdit: false });
+              console.log(e);
+            });
+        } else {
+          this.setState({ imageLoading: false, ProfileImage: "" });
         }
       })
       .catch(() => {
@@ -581,8 +656,8 @@ class Profile extends Component {
                   <Image
                     style={{ width: 120, height: 120, borderRadius: 100 }}
                     source={
-                      this.state.image.length > 0
-                        ? { uri: this.state.image }
+                      this.state.ProfileImage.length > 0
+                        ? { uri: this.state.ProfileImage }
                         : require("../../../../assets/user.png")
                     }
                   />

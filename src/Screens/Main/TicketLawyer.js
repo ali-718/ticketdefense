@@ -90,7 +90,7 @@ class TicketLawyer extends Component {
                 marginBottom: 20,
               }}
             >
-              Popular Traffic Ticket Lawyer
+              Congratulations following lawyer
             </Text>
             {/* </View> */}
 

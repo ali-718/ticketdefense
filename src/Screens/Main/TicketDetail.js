@@ -259,7 +259,7 @@ class TicketDetail extends Component {
                     <Text
                       style={{ color: Pink, fontSize: 17, fontWeight: "bold" }}
                     >
-                      Message Attorney
+                      Chat Attorney
                     </Text>
                   </TouchableOpacity>
                 )}
@@ -343,7 +343,7 @@ class TicketDetail extends Component {
                 )}
               </View>
 
-              <View
+              {/* <View
                 style={{
                   width: "100%",
                   marginTop: 20,
@@ -361,7 +361,7 @@ class TicketDetail extends Component {
                 <Text style={{ marginTop: 10, color: "gray", fontSize: 16 }}>
                   {this.state.ticket?.id}
                 </Text>
-              </View>
+              </View> */}
 
               <View
                 style={{

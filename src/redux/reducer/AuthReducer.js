@@ -12,6 +12,11 @@ export default function (state = initialState, action) {
         ...state,
         ticket: {},
       };
+    case "SET_IMAGE":
+      return {
+        ...state,
+        ticket: { ...state.ticket, image: payload },
+      };
     case "SET_LAWYER":
       return {
         ...state,
