@@ -10,19 +10,19 @@ import {
 } from "react-native";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import { Blue } from "../../config/Theme";
-import image1 from "../../../assets/Partners/1.jpeg";
-import image2 from "../../../assets/Partners/2.jpeg";
-import image3 from "../../../assets/Partners/3.jpeg";
-import image4 from "../../../assets/Partners/4.jpeg";
-import image5 from "../../../assets/Partners/5.jpeg";
-import image6 from "../../../assets/Partners/6.jpeg";
-import image7 from "../../../assets/Partners/7.jpeg";
-import image8 from "../../../assets/Partners/8.jpeg";
-import image9 from "../../../assets/Partners/9.jpeg";
-import image10 from "../../../assets/Partners/10.jpeg";
-import image11 from "../../../assets/Partners/11.jpeg";
-import image12 from "../../../assets/Partners/12.jpeg";
-import image13 from "../../../assets/Partners/13.jpeg";
+import image1 from "../../../assets/Partners/1.png";
+import image2 from "../../../assets/Partners/2.png";
+import image3 from "../../../assets/Partners/3.png";
+import image4 from "../../../assets/Partners/4.png";
+import image5 from "../../../assets/Partners/5.png";
+import image6 from "../../../assets/Partners/6.png";
+import image7 from "../../../assets/Partners/7.png";
+import image8 from "../../../assets/Partners/8.png";
+import image9 from "../../../assets/Partners/9.png";
+import image10 from "../../../assets/Partners/10.png";
+import image11 from "../../../assets/Partners/11.png";
+import image12 from "../../../assets/Partners/12.png";
+import image13 from "../../../assets/Partners/13.png";
 
 const WIDTH = Dimensions.get("window").width;
 
@@ -127,6 +127,9 @@ export default class Onboard extends Component {
       },
       {
         image: image12,
+      },
+      {
+        image: image13,
       },
     ],
     activeIndex: 0,
