@@ -842,7 +842,7 @@ class Checkout extends Component {
         >
           <View style={{ width: "100%" }}>
             <Text style={{ fontSize: 20, color: "black", fontWeight: "bold" }}>
-              Payment
+              Process Payment
             </Text>
             <Text
               style={{
@@ -853,9 +853,8 @@ class Checkout extends Component {
                 width: "100%",
               }}
             >
-              You are one step away from being matched with local{" "}
-              {this.props.auth.ticket?.state} attorney who will contest your
-              ticket in court
+              You are one step away from having a lawyer handle your ticket(s)
+              on your behalf!
             </Text>
           </View>
 
@@ -926,6 +925,16 @@ class Checkout extends Component {
                 }}
               >
                 $345
+              </Text>
+            </View>
+
+            <View style={{ width: "100%", marginTop: 20 }}>
+              <Text style={{ color: "gray" }}>
+                This rate includes an attorney entering a not guilty plea,
+                obtaining a hearing date, resolving your matter at a court
+                hearing or prior to that date, advising you, and usage of our
+                platform, support team, access and communication with your
+                attorney.
               </Text>
             </View>
 

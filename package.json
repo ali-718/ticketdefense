@@ -42,6 +42,7 @@
     "react-native-toast-message": "^1.4.2",
     "react-native-ui-xg": "0.0.6",
     "react-native-web": "~0.13.12",
+    "react-native-webview": "11.0.0",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",

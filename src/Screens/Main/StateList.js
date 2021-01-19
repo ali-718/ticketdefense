@@ -98,6 +98,8 @@ class StateList extends Component {
                 <TouchableOpacity
                   onPress={() => {
                     this.props.setUSState(item.text);
+                    // this.props.navigation.navigate("Lawyers");
+                    // just for lawyer profile, will roll it back
                     this.props.navigation.navigate("TicketImage");
                   }}
                   key={i}

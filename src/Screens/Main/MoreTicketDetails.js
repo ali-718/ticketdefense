@@ -268,7 +268,7 @@ class MoreTicketDetails extends Component {
                     color: "gray",
                   }}
                 >
-                  Do you currently have points on your license?
+                  For how many points do you have on your license ?
                 </Text>
               </View>
               <View style={{ width: 110, alignItems: "flex-end" }}>

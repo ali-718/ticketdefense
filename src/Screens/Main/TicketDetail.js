@@ -178,9 +178,11 @@ class TicketDetail extends Component {
             }}
           >
             <View style={{ width: "90%" }}>
-              <Text style={{ fontSize: 22, color: "black" }}>
+              <Text
+                style={{ fontSize: 18, color: "black", fontWeight: "bold" }}
+              >
                 Your ticket from{" "}
-                {moment(this.state.ticket?.date).format("MMMM D")}
+                {moment(this.state.ticket?.date).format("MMMM D, YYYY")}
               </Text>
 
               <View
@@ -200,7 +202,13 @@ class TicketDetail extends Component {
                     alignItems: "center",
                   }}
                 >
-                  <View
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate("LawyerProfile", {
+                        Lawyer: this.state.ticket?.lawyer,
+                        isPrice: false,
+                      })
+                    }
                     style={{
                       width: 70,
                       alignItems: "flex-start",
@@ -211,8 +219,16 @@ class TicketDetail extends Component {
                       style={{ width: 60, height: 60, borderRadius: 100 }}
                       source={{ uri: this.state.ticket?.lawyer?.image }}
                     />
-                  </View>
-                  <View style={{ flex: 1, marginLeft: 5 }}>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate("LawyerProfile", {
+                        Lawyer: this.state.ticket?.lawyer,
+                        isPrice: false,
+                      })
+                    }
+                    style={{ flex: 1, marginLeft: 5 }}
+                  >
                     <Text
                       numberOfLines={1}
                       style={{
@@ -235,7 +251,7 @@ class TicketDetail extends Component {
                     >
                       {this.state.ticket?.lawyer?.name}
                     </Text>
-                  </View>
+                  </TouchableOpacity>
                 </View>
                 {this.state.ticket?.status == 0 ? null : (
                   <TouchableOpacity
@@ -376,7 +392,7 @@ class TicketDetail extends Component {
                 <Text
                   style={{ color: "black", fontSize: 16, fontWeight: "bold" }}
                 >
-                  Issue date
+                  Processed
                 </Text>
                 <Text style={{ marginTop: 10, color: "gray", fontSize: 16 }}>
                   {moment(this.state.ticket?.date).format("MMMM D, YYYY")}
@@ -447,7 +463,7 @@ class TicketDetail extends Component {
                 <Text
                   style={{ fontSize: 22, color: "black", fontWeight: "bold" }}
                 >
-                  Violation
+                  Description
                 </Text>
 
                 <View

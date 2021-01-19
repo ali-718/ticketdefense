@@ -26,6 +26,7 @@ import "./src/config/firebase";
 import ForgotPassword from "./src/Screens/Auth/ForgotPassword";
 import TicketDetail from "./src/Screens/Main/TicketDetail";
 import Message from "./src/Screens/Main/Message";
+import LawyerProfile from "./src/Screens/Main/LawyerProfile";
 
 const Stack = createStackNavigator();
 
@@ -55,6 +56,7 @@ const Main = () => (
     <Stack.Screen name="Checkout" component={Checkout} />
     <Stack.Screen name="TicketDetail" component={TicketDetail} />
     <Stack.Screen name="Message" component={Message} />
+    <Stack.Screen name="LawyerProfile" component={LawyerProfile} />
     {/* settings screens */}
     <Stack.Screen name="Profile" component={Profile} />
     <Stack.Screen name="PaymentMethods" component={PaymentMethods} />

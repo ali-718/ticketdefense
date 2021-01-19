@@ -57,8 +57,11 @@ class TicketLawyer extends Component {
   };
 
   continue = (item) => {
-    this.props.setLawyer(item);
-    this.props.navigation.navigate("Checkout");
+    // this.props.setLawyer(item);
+    this.props.navigation.navigate("LawyerProfile", {
+      Lawyer: item,
+      isPrice: true,
+    });
   };
 
   render() {

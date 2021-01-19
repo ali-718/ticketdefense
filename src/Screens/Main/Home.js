@@ -28,26 +28,18 @@ class Home extends Component {
     const { status } = await Notifications.requestPermissionsAsync();
 
     if (status == "granted") {
-      Notifications.getExpoPushTokenAsync({ experienceId: undefined })
-        .then((token) => {
+      Notifications.getExpoPushTokenAsync({ experienceId: undefined }).then(
+        (token) => {
           f.default
             .database()
             .ref("users")
             .child(this.props.auth.user?.id)
             .update({
               token: token.data,
-            })
-            .catch((e) => {
-              alert("unable to upload notification");
             });
-          console.log(token);
-        })
-        .catch((e) => {
-          alert(JSON.stringify(e));
-          // console.log(e);
-        });
+        }
+      );
     } else {
-      alert("unable to get push notification");
       await Notifications.requestPermissionsAsync();
     }
     console.log(status);
