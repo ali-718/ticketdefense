@@ -93,7 +93,7 @@ class TicketLawyer extends Component {
                 marginBottom: 20,
               }}
             >
-              Congratulations following lawyer
+              Congratulations! The Following Lawyers Can Help You!
             </Text>
             {/* </View> */}
 

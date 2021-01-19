@@ -35,11 +35,37 @@ export default class Onboard extends Component {
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
+          marginTop: 20,
+          marginBottom: 10,
+        }}
+      >
+        <View style={{ width: "90%" }}>
+          <View style={{ width: "100%" }}>
+            <Text style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>
+              {item.title}
+            </Text>
+          </View>
+          <Text style={{ color: "gray", fontSize: 15, marginTop: 10 }}>
+            {item.message}
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
+  _renderLogos = ({ item, index }) => {
+    return (
+      <View
+        style={{
+          width: "100%",
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <View style={{ width: "90%" }}>
           <Image
-            style={{ width: "100%", height: 200, resizeMode: "contain" }}
+            style={{ width: "100%", height: 100, resizeMode: "contain" }}
             source={item.image}
           />
         </View>
@@ -49,6 +75,23 @@ export default class Onboard extends Component {
 
   state = {
     entries: [
+      {
+        title: "How to :",
+        message:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
+      },
+      {
+        title: "How to :",
+        message:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
+      },
+      {
+        title: "How to :",
+        message:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
+      },
+    ],
+    logos: [
       {
         image: image1,
       },
@@ -128,6 +171,16 @@ export default class Onboard extends Component {
             <Pagination
               dotsLength={this.state.entries.length}
               activeDotIndex={this.state.activeIndex}
+            />
+            <Carousel
+              onSnapToItem={(index) => this.setState({ activeIndex: index })}
+              data={this.state.logos}
+              renderItem={this._renderLogos}
+              sliderWidth={WIDTH}
+              itemWidth={WIDTH / 4}
+              loop
+              numColumns={4}
+              style={{ height: 150 }}
             />
           </View>
           <View
