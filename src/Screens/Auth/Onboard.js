@@ -35,8 +35,8 @@ export default class Onboard extends Component {
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
-          marginTop: 20,
-          marginBottom: 10,
+          marginTop: 50,
+          paddingBottom: 50,
         }}
       >
         <View style={{ width: "90%" }}>
@@ -76,19 +76,19 @@ export default class Onboard extends Component {
   state = {
     entries: [
       {
-        title: "How to :",
-        message:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
+        title: "Our Lawyers Fight Traffic Tickets!",
+        message: `Avoid Points. Save Money. A single ticket can cost you thousands of dollars over time, from increased insurance premiums, court fines, surcharges, points, and court costs. Fight your ticket at an amazing, affordable, with the Lowest Rate In State Guaranteed!`,
       },
       {
-        title: "How to :",
-        message:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
+        title: "Three Easy Steps!",
+        message: `
+        Create Your Profile
+        Snap a Photo of your Ticket(s)
+        Pick Your Lawyer`,
       },
       {
-        title: "How to :",
-        message:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
+        title: "Trusted, Reliable, and Effective!",
+        message: `Saves you time with no in-person appointments at a lawyer’s office. Rates are pre-negotiated to assure you have the most affordable rate. All lawyers are experienced in handling traffic tickets. 100% Money Back Guarantee Available. Easily communicate with your lawyer for status updates. Save thousands of dollars over time by having your lawyer fight your ticket, help you save points, and help you save on increased insurance costs over many years.`,
       },
     ],
     logos: [

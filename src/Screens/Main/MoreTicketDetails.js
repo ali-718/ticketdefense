@@ -349,7 +349,7 @@ class MoreTicketDetails extends Component {
                     color: "gray",
                   }}
                 >
-                  How many points do you have on your license?
+                  How many points do you currently have on your license?
                 </Text>
               </View>
               <View

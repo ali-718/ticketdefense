@@ -842,7 +842,7 @@ class Checkout extends Component {
         >
           <View style={{ width: "100%" }}>
             <Text style={{ fontSize: 20, color: "black", fontWeight: "bold" }}>
-              Process Payment
+              Securely Process Payment Here!
             </Text>
             <Text
               style={{
@@ -853,8 +853,13 @@ class Checkout extends Component {
                 width: "100%",
               }}
             >
-              You are one step away from having a lawyer handle your ticket(s)
-              on your behalf!
+              Your Total Rate Total Rate  This rate includes your lawyer
+              entering your not guilty plea, obtaining a hearing date, resolving
+              your matter at a court hearing or prior to that date, requesting
+              discovery evidence from the police department if deemed necessary,
+              advising you, usage of our platform and mobile app, access to our
+              support team, and access and communication with your attorney at a
+              pre-negotiated lowest rate in state guarantee.
             </Text>
           </View>
 

@@ -149,7 +149,8 @@ class LawyerProfile extends Component {
                         fontSize: 20,
                       }}
                     >
-                      Fight ticket for ${this.state.lawyer?.price}
+                      {/* Fight ticket for ${this.state.lawyer?.price} */}
+                      HIRE THIS LAWYER!
                     </Text>
                   </TouchableOpacity>
                 ) : null}

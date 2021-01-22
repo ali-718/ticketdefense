@@ -229,7 +229,7 @@ class TicketImage extends Component {
                 <Text
                   style={{ color: "tomato", textDecorationLine: "underline" }}
                 >
-                  cancel
+                  Back
                 </Text>
               </TouchableOpacity>
 
@@ -297,7 +297,7 @@ class TicketImage extends Component {
         >
           <View style={{ width: "100%" }}>
             <Text style={{ fontSize: 20, color: "black", fontWeight: "bold" }}>
-              Start a new case
+              Upload Your Ticket(s) Here!
             </Text>
             <Text
               style={{
@@ -308,8 +308,8 @@ class TicketImage extends Component {
                 width: "100%",
               }}
             >
-              For the most accurate quote, upload a photo of your ticket or
-              court appearance notice
+              You may also upload any other additional documents, driver’s
+              license, evidence, or photos you have which your lawyer can use.
             </Text>
           </View>
 
@@ -347,7 +347,7 @@ class TicketImage extends Component {
               <Text
                 style={{ color: "white", fontSize: 17, fontWeight: "bold" }}
               >
-                Take a photo of your ticket
+                SNAP A PHOTO
               </Text>
             </TouchableOpacity>
 

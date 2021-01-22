@@ -58,7 +58,7 @@ class StateList extends Component {
           <View style={{ width: "90%", flex: 1, alignItems: "center" }}>
             {/* <View style={{ width: "100%" }}> */}
             <Text style={{ fontSize: 20, color: "black", fontWeight: "bold" }}>
-              Where did you get your ticket ?
+              Where did you get your ticket(s)?
             </Text>
             {/* </View> */}
 

@@ -275,7 +275,7 @@ class TicketDetail extends Component {
                     <Text
                       style={{ color: Pink, fontSize: 17, fontWeight: "bold" }}
                     >
-                      Chat Attorney
+                      Message Lawyer
                     </Text>
                   </TouchableOpacity>
                 )}
@@ -452,7 +452,7 @@ class TicketDetail extends Component {
                 <Text
                   style={{ color: "black", fontSize: 16, fontWeight: "bold" }}
                 >
-                  Points on license
+                  Points On License
                 </Text>
                 <Text style={{ marginTop: 10, color: "gray", fontSize: 16 }}>
                   {this.state.ticket?.violation?.points}
